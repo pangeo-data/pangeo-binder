@@ -1,0 +1,7 @@
+binderhub:
+  rbac:
+    enabled: true
+
+  jupyterhub:
+    singleuser:
+      serviceAccountName: daskkubernetes
