@@ -1,4 +1,6 @@
 binderhub:
+  build:
+    repo2dockerImage: jupyter/repo2docker:b8d8206
   registry:
     prefix: gcr.io/pangeo-181919/pangeo-binder
     enabled: true
