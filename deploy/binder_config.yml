@@ -5,4 +5,4 @@ binderhub:
     prefix: gcr.io/pangeo-181919/pangeo-binder
     enabled: true
   hub:
-    url: http://35.185.197.178
+    url: http://hub.binder.pangeo.io
