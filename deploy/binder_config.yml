@@ -1,8 +1,57 @@
 binderhub:
   build:
-    repo2dockerImage: jupyter/repo2docker:b8d8206
+    repo2dockerImage: jupyter/repo2docker:dce3042
+    nodeSelector:
+      cloud.google.com/gke-nodepool: user-pool
+
+  nodeSelector:
+     cloud.google.com/gke-nodepool: default-pool
+
   registry:
     prefix: gcr.io/pangeo-181919/pangeo-binder
     enabled: true
+
   hub:
     url: http://hub.binder.pangeo.io
+
+  jupyterhub:
+    cull:
+      timeout: 600
+    singleuser:
+      cpu:
+        limit: 4
+        guarantee: 1
+      memory:
+        limit: 26G
+        guarantee: 4G
+      nodeSelector:
+        cloud.google.com/gke-nodepool: user-pool
+    hub:
+      nodeSelector:
+        cloud.google.com/gke-nodepool: default-pool
+      resources:
+        requests:
+          cpu: "0.25"
+          memory: 1Gi
+        limits:
+          cpu: "2"
+          memory: 1Gi
+    proxy:
+      nodeSelector:
+        cloud.google.com/gke-nodepool: default-pool
+      chp:
+        resources:
+          requests:
+            memory: 512Mi
+            cpu: "0.25"
+          limits:
+            memory: 512Mi
+            cpu: "0.5"
+      nginx:
+        resources:
+          requests:
+            memory: 1Gi
+            cpu: "0.25"
+          limits:
+            memory: 1Gi
+            cpu: 1
