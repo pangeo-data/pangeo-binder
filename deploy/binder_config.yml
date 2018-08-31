@@ -47,6 +47,8 @@ binderhub:
     cull:
       timeout: 600
     singleuser:
+      # start jupyter notebook
+      cmd: jupyter-lab
       cpu:
         limit: 4
         guarantee: 1
