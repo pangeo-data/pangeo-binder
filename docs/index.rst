@@ -107,6 +107,11 @@ example below. A few key points about using the start script:
 
    exec "$@"
 
+Examples using Pangeo's Binder
+------------------------------
+
+- `Pangeo Example Notebooks`_
+
 .. _Pangeo: http://www.pangeo.io
 .. _Pangeo's: http://www.pangeo.io
 .. _online documentation: http://www.pangeo.io
@@ -117,3 +122,4 @@ example below. A few key points about using the start script:
 .. _binderhub Documentation: https://binderhub.readthedocs.io/en/latest/
 .. _Dask-kubernetes: https://dask-kubernetes.readthedocs.io/en/latest/
 .. _Kubernetes: https://kubernetes.io/
+.. _Pangeo Example Notebooks: https://github.com/pangeo-data/pangeo-example-notebooks
