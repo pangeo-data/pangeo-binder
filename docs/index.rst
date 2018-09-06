@@ -2,14 +2,14 @@ Pangeo
 ======
 
 .. image:: _static/pangeo_simple_logo.svg
-   :width: 500 px
+   :width: 390 px
 
 .. raw:: html
 
    <br />
 
 .. image:: _static/binder_logo.png
-   :width: 400 px
+   :width: 145 px
 
 About Pangeo's Binder
 ---------------------
