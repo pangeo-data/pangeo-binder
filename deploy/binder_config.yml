@@ -49,6 +49,8 @@ binderhub:
     singleuser:
       # start jupyter notebook
       cmd: jupyter-lab
+      cloudMetadata:
+        enabled: true
       cpu:
         limit: 4
         guarantee: 1
