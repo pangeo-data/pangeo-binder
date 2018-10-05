@@ -1,6 +1,5 @@
 binderhub:
   build:
-    repo2dockerImage: jupyter/repo2docker:9956886
     nodeSelector:
       cloud.google.com/gke-nodepool: user-pool
 
