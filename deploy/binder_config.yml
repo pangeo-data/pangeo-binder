@@ -44,7 +44,12 @@ binderhub:
 
   jupyterhub:
     cull:
+      # cull every 11 minutes so it is out of phase
+      # with the proxy check-routes interval of five minutes
+      every: 660
       timeout: 600
+      # maxAge is 3 hours: 3 * 3600 = 10800
+      maxAge: 10800
     singleuser:
       # start jupyter notebook
       cmd: jupyter-lab
