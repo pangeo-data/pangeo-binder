@@ -30,6 +30,23 @@ common configurations used on Pangeo's BinderHub deployment. Specifically,
 we'll provide examples of the ``.dask/config.yaml`` configuration file and the
 ``binder/start`` script.
 
+Using the Pangeo-Binder Cookiecutter
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We have put together a cookiecutter repo to help setup binder repositories that
+can take advantage of Pangeo. This automates the setup of some of the
+configuration (described in detail below). The usage for this tool is described
+below.
+
+::
+
+  pip install -U cookiecutter
+  cookiecutter https://github.com/pangeo-data/cookiecutter-pangeo-binder.git
+
+After running the cookiecutter command, simply follow the command line instructions
+to compete setting up your repository. Add some Jupyter Notebooks, configure your
+environment and push the whole thing to GitHub.
+
 Configuring dask-kubernetes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -37,75 +54,79 @@ Configuring dask-kubernetes
 Kubernetes_. When using dask-kubernetes on binder, you need to specify some
 basic configuration options. An example of a file named `.dask/config.yaml`.
 
-Note the configuration value for ``image`` is set to ``WORKER_IMAGE``. This is
-a template value that will be overwritten in the `start script`_ below.
-
 .. .dask/config.yaml
 
 ::
 
   # .dask/config.yaml
-  logging:
-    bokeh: critical
+  fuse_subgraphs: False
+  fuse_ave_width: 0
 
-  diagnostics-link: "../proxy/{port}/status"
-    tick-maximum-delay: 5s
+  distributed:
+    logging:
+      bokeh: critical
+
+    dashboard:
+      link: /user/{JUPYTERHUB_USER}/proxy/{port}/status
+
+    admin:
+      tick:
+        limit: 5s
 
   kubernetes:
-   worker-template:
-     metadata:
-     spec:
-       restartPolicy: Never
-       containers:
-       - args:
-           - dask-worker
-           - --nthreads
-           - '2'
-           - --no-bokeh
-           - --memory-limit
-           - 7GB
-           - --death-timeout
-           - '60'
-         image: WORKER_IMAGE
-         name: dask-worker
-         resources:
-           limits:
-             cpu: "1.75"
-             memory: 7G
-           requests:
-             cpu: "1.75"
-             memory: 7G
+    count:
+      max: 50
+    worker-template:
+      metadata:
+      spec:
+        nodeSelector:
+          dask-worker: True
+        restartPolicy: Never
+        containers:
+        - args:
+            - dask-worker
+            - --nthreads
+            - '2'
+            - --no-bokeh
+            - --memory-limit
+            - 7GB
+            - --death-timeout
+            - '60'
+          image: ${JUPYTER_IMAGE_SPEC}
+          name: dask-worker
+          resources:
+            limits:
+              cpu: "1.75"
+              memory: 7G
+            requests:
+              cpu: 1
+              memory: 7G
 
 start script
 ~~~~~~~~~~~~
 
 The start script (e.g. ``binder/start``) provides a mechanism to update the
-binder environment at run time. The start script should look roughly like the
+user environment at run time. The start script should look roughly like the
 example below. A few key points about using the start script:
 
-- The ``WORKER_IMAGE`` variable is updated using the ``sed`` command. This is an
-  important step when using dask-kubernetes.
 - The start script must end with the ``exec "$@"`` line.
 - The start script should not do any major work (i.e. don't download a large
   dataset using this script)
 
 ::
 
-   #!/usr/bin/env bash
+  #!/bin/bash
 
-   export DASK_DISTRIBUTED__DIAGNOSTICS_LINK={JUPYTERHUB_SERVICE_PREFIX}proxy/{port}/status
-   export DASK_KUBERNETES__WORKER_TEMPLATE_PATH=${PWD}/.dask/config.yaml
-   export DASK_KUBERNETES__WORKER_NAME=dask-{JUPYTERHUB_USER}-{uuid}
+  # Replace DASK_DASHBOARD_URL with the proxy location
+  sed -i -e "s|DASK_DASHBOARD_URL|/user/${JUPYTERHUB_USER}/proxy/8787|g" binder/jupyterlab-workspace.json
+  # Get the right workspace ID
+  sed -i -e "s|WORKSPACE_ID|/user/${JUPYTERHUB_USER}/lab|g" binder/jupyterlab-workspace.json
 
+  # Import the workspace into JupyterLab
+  jupyter lab workspaces import binder/jupyterlab-workspace.json \
+    --NotebookApp.base_url=user/${JUPYTERHUB_USER}
 
-   # set worker image url in worker template
-   if [[ -z "${JUPYTER_IMAGE_SPEC}" ]]; then
-       echo "JUPYTER_IMAGE_SPEC is not set"
-   else
-     sed -i -e "s|WORKER_IMAGE|${JUPYTER_IMAGE_SPEC}|g" ${DASK_KUBERNETES__WORKER_TEMPLATE_PATH}
-   fi
-
-   exec "$@"
+  exec "$@"
 
 Examples using Pangeo's Binder
 ------------------------------
