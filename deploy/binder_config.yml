@@ -41,7 +41,8 @@ binderhub:
 
   hub:
     url: http://hub.binder.pangeo.io
-
+  build:	
+    repo2dockerImage: jupyter/repo2docker:5cdd0ee
   jupyterhub:
     cull:
       # cull every 11 minutes so it is out of phase
