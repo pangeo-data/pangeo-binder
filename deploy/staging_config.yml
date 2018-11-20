@@ -5,6 +5,9 @@ binderhub:
 
   nodeSelector:
      cloud.google.com/gke-nodepool: default-pool
+  ingress:
+    hosts:
+      - staging.binder.pangeo.io
 
   registry:
     prefix: gcr.io/pangeo-181919/pangeo-binder
@@ -39,7 +42,7 @@ binderhub:
       mountPath: /etc/binderhub/templates
 
   hub:
-    url: http://hub.staging.binder.pangeo.io
+    url: https://hub.staging.binder.pangeo.io
   build:
     repo2dockerImage: jupyter/repo2docker:5cdd0ee
   jupyterhub:
@@ -92,3 +95,10 @@ binderhub:
           limits:
             memory: 1Gi
             cpu: 1
+    ingress:
+      hosts:
+        - hub.staging.binder.pangeo.io
+      tls:
+        - secretName: kubelego-tls-jupyterhub-staging
+          hosts:
+            - hub.staging.binder.pangeo.io
