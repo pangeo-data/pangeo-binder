@@ -18,7 +18,7 @@ binderhub:
     path: "/etc/binderhub/templates/templates"
     static:
       path: "/etc/binderhub/templates/static"
-      urlPrefix: /extra_static/
+      urlPrefix: extra_static/
   initContainers:
     - name: git-clone-templates
       image: alpine/git
