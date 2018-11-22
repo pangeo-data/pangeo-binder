@@ -6,6 +6,10 @@ binderhub:
   nodeSelector:
      cloud.google.com/gke-nodepool: default-pool
 
+  ingress:
+    hosts:
+      - binder.pangeo.io
+
   registry:
     prefix: gcr.io/pangeo-181919/pangeo-binder
     enabled: true
@@ -14,7 +18,7 @@ binderhub:
     path: "/etc/binderhub/templates/templates"
     static:
       path: "/etc/binderhub/templates/static"
-      urlPrefix: /extra_static/
+      urlPrefix: extra_static/
   initContainers:
     - name: git-clone-templates
       image: alpine/git
@@ -75,6 +79,11 @@ binderhub:
           cpu: "2"
           memory: 1Gi
     proxy:
+      https:
+        hosts:
+        - hub.binder.pangeo.io
+        letsencrypt:
+          contactEmail: dludwig@anaconda.com
       nodeSelector:
         cloud.google.com/gke-nodepool: default-pool
       chp:
@@ -93,3 +102,10 @@ binderhub:
           limits:
             memory: 1Gi
             cpu: 1
+    ingress:
+      hosts:
+        - hub.binder.pangeo.io
+      tls:
+        - secretName: kubelego-tls-jupyterhub-binder
+          hosts:
+            - hub.binder.pangeo.io

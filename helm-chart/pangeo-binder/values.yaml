@@ -2,6 +2,58 @@ binderhub:
   rbac:
     enabled: true
 
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+    https:
+      enabled: true
+      type: kube-lego
+
   jupyterhub:
     singleuser:
       serviceAccountName: daskkubernetes
+    ingress:
+      enabled: true
+      annotations:
+        ingress.kubernetes.io/proxy-body-size: 64m
+        kubernetes.io/ingress.class: nginx
+        kubernetes.io/tls-acme: 'true'
+
+nginx-ingress:
+  rbac:
+    create: true
+  defaultBackend:
+    minAvailable: 0
+  # statsExporter:
+  #   service:
+  #     annotations:
+  #       prometheus.io/scrape: 'true'
+  #       prometheus.io/port: '10254'
+  controller:
+    replicaCount: 2
+    scope:
+      enabled: true
+    config:
+      # Allow POSTs of upto 64MB, for large notebook support.
+      proxy-body-size: 64m
+    # stats:
+    #   enabled: true
+    # metrics:
+    #   enabled: true
+    #   service:
+    #     annotations:
+    #       prometheus.io/scrape: 'true'
+    #       prometheus.io/port: '10254'
+    service:
+      # Preserve client IPs
+      externalTrafficPolicy: Local
+
+kube-lego:
+  config:
+    LEGO_EMAIL: dludwig@anaconda.com
+    LEGO_URL: https://acme-v01.api.letsencrypt.org/directory
+  rbac:
+    create: true
+  image:
+    tag: 0.1.7
