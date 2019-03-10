@@ -4,10 +4,6 @@ binderhub:
       use_registry: true
       image_prefix: gcr.io/pangeo-181919/pangeo-binder
       build_image: jupyter/repo2docker:9766c954
-      build_node_selector: map[cloud.google.com/gke-nodepool:notebook-pool]
-
-  nodeSelector:
-    cloud.google.com/gke-nodepool: default-pool
   template:
     path: "/etc/binderhub/templates/templates"
     static:
@@ -54,11 +50,7 @@ binderhub:
       memory:
         limit: 26G
         guarantee: 4G
-      nodeSelector:
-        cloud.google.com/gke-nodepool: notebook-pool
     hub:
-      nodeSelector:
-        cloud.google.com/gke-nodepool: default-pool
       resources:
         requests:
           cpu: "0.25"
@@ -67,8 +59,6 @@ binderhub:
           cpu: "2"
           memory: 1Gi
     proxy:
-      nodeSelector:
-        cloud.google.com/gke-nodepool: default-pool
       chp:
         resources:
           requests:
