@@ -1,15 +1,15 @@
-# binderhub:
-#   config:
-#     BinderHub:
-#       hub_url: https://hub.staging.binder.pangeo.io
-#   ingress:
-#     hosts:
-#       - staging.binder.pangeo.io
-#   jupyterhub:
-#     ingress:
-#       hosts:
-#         - hub.staging.binder.pangeo.io
-#       tls:
-#         - secretName: kubelego-tls-jupyterhub-staging
-#           hosts:
-#             - hub.staging.binder.pangeo.io
+binderhub:
+  config:
+    BinderHub:
+      hub_url: https://hub.staging.binder.pangeo.io
+  ingress:
+    hosts:
+      - staging.binder.pangeo.io
+  jupyterhub:
+    ingress:
+      hosts:
+        - hub.staging.binder.pangeo.io
+      tls:
+        - secretName: kubelego-tls-jupyterhub-staging
+          hosts:
+            - hub.staging.binder.pangeo.io
