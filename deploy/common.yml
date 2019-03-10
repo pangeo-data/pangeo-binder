@@ -1,12 +1,13 @@
 binderhub:
-  build:
-    nodeSelector:
-      cloud.google.com/gke-nodepool: notebook-pool
+  config:
+    BinderHub:
+      use_registry: true
+      image_prefix: gcr.io/pangeo-181919/pangeo-binder
+      build_image: jupyter/repo2docker:9766c954
+      build_node_selector: map[cloud.google.com/gke-nodepool:notebook-pool]
+
   nodeSelector:
-     cloud.google.com/gke-nodepool: default-pool
-  registry:
-    prefix: gcr.io/pangeo-181919/pangeo-binder
-    enabled: true
+    cloud.google.com/gke-nodepool: default-pool
   template:
     path: "/etc/binderhub/templates/templates"
     static:
@@ -33,8 +34,7 @@ binderhub:
   extraVolumeMounts:
     - name: custom-templates
       mountPath: /etc/binderhub/templates
-  build:
-    repo2dockerImage: jupyter/repo2docker:5cdd0ee
+
   jupyterhub:
     cull:
       # cull every 11 minutes so it is out of phase
