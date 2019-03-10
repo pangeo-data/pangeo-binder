@@ -1,7 +1,7 @@
 # requirements.yaml
 dependencies:
 - name: binderhub
-  version: 0.2.0-6bfd93b
+  version: 0.2.0-3b53fce 
   repository: https://jupyterhub.github.io/helm-chart/
   import-values:
     - child: rbac
@@ -12,9 +12,4 @@ dependencies:
 - name: nginx-ingress
   version: 0.20.0
   repository: https://kubernetes-charts.storage.googleapis.com
-- name: prometheus
-  version: 7.4.4
-  repository: https://kubernetes-charts.storage.googleapis.com
-- name: grafana
-  version: 1.18.0
-  repository: https://kubernetes-charts.storage.googleapis.com
+  
