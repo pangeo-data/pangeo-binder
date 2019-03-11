@@ -1,14 +1,5 @@
 binderhub:
-  ingress:
-    hosts:
-      - binder.pangeo.io
-  hub:
-    url: https://hub.binder.pangeo.io
-  jupyterhub:
-    ingress:
-      hosts:
-        - hub.binder.pangeo.io
-      tls:
-        - secretName: kubelego-tls-jupyterhub-binder
-          hosts:
-            - hub.binder.pangeo.io
+  config:
+    BinderHub:
+      hub_url: http://35.225.122.128
+      image_prefix: gcr.io/pangeo-181919/prod-

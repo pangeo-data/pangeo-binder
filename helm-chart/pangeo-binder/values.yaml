@@ -2,58 +2,38 @@ binderhub:
   rbac:
     enabled: true
 
-  ingress:
-    enabled: true
-    annotations:
-      kubernetes.io/ingress.class: nginx
-    https:
-      enabled: true
-      type: kube-lego
+  config:
+    BinderHub:
+      use_registry: true
+      build_image: jupyter/repo2docker:9766c954
+      per_repo_quota: 100
 
   jupyterhub:
+    cull:
+      # cull every 11 minutes so it is out of phase
+      # with the proxy check-routes interval of five minutes
+      every: 660
+      timeout: 600
+      # maxAge is 3 hours: 3 * 3600 = 10800
+      maxAge: 10800
     singleuser:
       serviceAccountName: daskkubernetes
-    ingress:
-      enabled: false
-      annotations:
-        ingress.kubernetes.io/proxy-body-size: 64m
-        kubernetes.io/ingress.class: nginx
-        kubernetes.io/tls-acme: 'true'
+      # start jupyter notebook
+      cmd: jupyter-lab
+      cloudMetadata:
+        enabled: true
+      cpu:
+        limit: 4
+        guarantee: 1
+      memory:
+        limit: 26G
+        guarantee: 4G
+    hub:
+      resources:
+        requests:
+          cpu: "0.25"
+          memory: 1Gi
+        limits:
+          cpu: "2"
+          memory: 1Gi
 
-nginx-ingress:
-  rbac:
-    create: true
-  defaultBackend:
-    minAvailable: 0
-  statsExporter:
-    service:
-      annotations:
-        prometheus.io/scrape: 'true'
-        prometheus.io/port: '10254'
-  controller:
-    replicaCount: 2
-    scope:
-      enabled: true
-    config:
-      # Allow POSTs of upto 64MB, for large notebook support.
-      proxy-body-size: 64m
-    # stats:
-    #   enabled: true
-    # metrics:
-    #   enabled: true
-    #   service:
-    #     annotations:
-    #       prometheus.io/scrape: 'true'
-    #       prometheus.io/port: '10254'
-    service:
-      # Preserve client IPs
-      externalTrafficPolicy: Local
-
-kube-lego:
-  config:
-    LEGO_EMAIL: dludwig@anaconda.com
-    LEGO_URL: https://acme-v01.api.letsencrypt.org/directory
-  rbac:
-    create: true
-  image:
-    tag: 0.1.7
