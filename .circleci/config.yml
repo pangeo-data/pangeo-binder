@@ -1,0 +1,70 @@
+version: 2
+jobs:
+  build:
+  deploy:
+    docker:
+      - image: buildpack-deps:bionic-scm
+    working_directory: ~/repo
+    steps:
+      - run:
+          name: Install base apt packages
+          command: |
+            sudo apt-get update -qq --yes
+            sudo apt-get install -qq --yes git-crypt
+
+      - checkout
+
+      - run:
+          name: Unlock our secrets
+          command: |
+            echo "${GIT_CRYPT_KEY}" | base64 -d > ~/repo/key
+            git crypt unlock ~/repo/key
+            rm ~/repo/key
+      - run:
+          name: Install dependencies
+          command: |
+            python3 --version
+            python3 -m venv venv
+            source venv/bin/activate
+            curl -sSL https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-226.0.0-linux-x86_64.tar.gz | tar -C venv/ -xzf -
+            echo 'export PATH="${HOME}/repo/venv/bin:${HOME}/repo/venv/google-cloud-sdk/bin:${PATH}"' >> ${BASH_ENV}
+      - run:
+          name: Install helm
+          when: always
+          command: |
+            curl https://storage.googleapis.com/kubernetes-helm/helm-v2.12.0-linux-amd64.tar.gz | \
+              tar -xzf -
+            sudo mv linux-amd64/helm /usr/local/bin
+            helm init --client-only
+            helm repo add binderhub https://jupyterhub.github.io/helm-chart
+            helm repo update
+
+      - run:
+          name: Authenticate to k8s cluster
+          when: always
+          command: |
+            gcloud auth activate-service-account --key-file ~/repo/secrets/gcloud-service-key.json
+            gcloud container clusters --zone=us-central1-b --project=pangeo-181919 get-credentials binder
+
+      - run:
+          name: Deploy binderhub
+          when: always
+          command: |
+            cd helm-chart
+            helm upgrade --wait --install \
+              ${CIRCLE_BRANCH} pangeo-binder \
+              --namespace=${CIRCLE_BRANCH} --version=v0.2.0 \
+              -f ../deploy/${CIRCLE_BRANCH}.yaml \
+              -f ../secrets/${CIRCLE_BRANCH}.yaml
+
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - deploy:
+          filters:
+            branches:
+              only:
+                - staging
+                - prod
