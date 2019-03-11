@@ -70,7 +70,7 @@ nginx-ingress:
 
 kube-lego:
   config:
-    LEGO_EMAIL: dludwig@anaconda.com
+    LEGO_EMAIL: jhamman@ucar.edu
     LEGO_URL: https://acme-v01.api.letsencrypt.org/directory
   rbac:
     create: true
