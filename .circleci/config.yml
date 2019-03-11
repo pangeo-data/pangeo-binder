@@ -1,0 +1,66 @@
+version: 1
+jobs:
+  build:
+  deploy:
+    docker:
+      - image: buildpack-deps:bionic-scm
+    working_directory: ~/repo
+    steps:
+      - run:
+          name: Install base apt packages
+          command: |
+            sudo apt-get update -qq --yes
+            sudo apt-get install -qq --yes git-crypt
+      - checkout
+      - run:
+          name: Unlock our secrets
+          command: |
+            echo "${GIT_CRYPT_KEY}" | base64 -d > ~/repo/key
+            git crypt unlock ~/repo/key
+            rm ~/repo/key
+      - run:
+          name: Install helm
+          when: always
+          command: |
+            curl https://storage.googleapis.com/kubernetes-helm/helm-v2.12.0-linux-amd64.tar.gz | \
+              tar -xzf -
+            sudo mv linux-amd64/helm /usr/local/bin
+            helm init --client-only
+            helm repo add binderhub https://jupyterhub.github.io/helm-chart
+            helm repo update
+
+      - run:
+          name: Authenticate to k8s cluster
+          when: always
+          command: |
+            echo "TODO: authenticate to k8s cluster(s)"
+
+      - run:
+          name: Deploy binderhub
+          when: always
+          command: |
+            cd helm-chart
+            helm upgrade ${CIRCLE_BRANCH} \
+              --install pangeo-binder \
+              --namespace=${CIRCLE_BRANCH} \
+              --version=v0.2.0  \
+              -f ../deploy/${CIRCLE_BRANCH}.yaml \
+              -f ../secrets/${CIRCLE_BRANCH}.yaml
+
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build:
+          filters:
+            branches:
+              ignore:
+                - staging
+                - prod
+      - deploy:
+          filters:
+            branches:
+              only:
+                - staging
+                - prod
