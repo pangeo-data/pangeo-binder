@@ -37,6 +37,9 @@ jobs:
             helm init --client-only
             helm repo add binderhub https://jupyterhub.github.io/helm-chart
             helm repo update
+            cd ~/repo/helm-chart/pangeo-binder
+            helm dependency update
+            cd -
 
       - run:
           name: Authenticate to k8s cluster
