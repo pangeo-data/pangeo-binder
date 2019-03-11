@@ -1,5 +1,5 @@
 binderhub:
   config:
     BinderHub:
-      hub_url: http://35.225.122.128
+      hub_url: http://hub.binder.pangeo.io
       image_prefix: gcr.io/pangeo-181919/prod-
