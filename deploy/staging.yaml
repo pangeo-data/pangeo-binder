@@ -7,11 +7,11 @@ binderhub:
   ingress:
     hosts:
       - staging.binder.pangeo.io
-    jupyterhub:
-      ingress:
-        hosts:
-          - hub.staging.binder.pangeo.io
-        tls:
-          - secretName: kubelego-tls-jupyterhub-staging
-            hosts:
-              - hub.staging.binder.pangeo.io
+  jupyterhub:
+    ingress:
+      hosts:
+        - hub.staging.binder.pangeo.io
+      tls:
+        - secretName: kubelego-tls-jupyterhub-staging
+          hosts:
+            - hub.staging.binder.pangeo.io
