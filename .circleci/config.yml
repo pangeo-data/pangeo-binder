@@ -2,14 +2,14 @@ version: 2
 jobs:
   deploy:
     docker:
-      - image: buildpack-deps:bionic-scm
+      - image: circleci/python:3.7.2
     working_directory: ~/repo
     steps:
       - run:
           name: Install base apt packages
           command: |
-            apt-get update -qq --yes
-            apt-get install -qq --yes git-crypt
+            sudo apt-get update -qq --yes
+            sudo apt-get install -qq --yes git-crypt
 
       - checkout
 
@@ -33,7 +33,7 @@ jobs:
           command: |
             curl https://storage.googleapis.com/kubernetes-helm/helm-v2.12.0-linux-amd64.tar.gz | \
               tar -xzf -
-            mv linux-amd64/helm /usr/local/bin
+            sudo mv linux-amd64/helm /usr/local/bin
             helm init --client-only
             helm repo add binderhub https://jupyterhub.github.io/helm-chart
             helm repo update
