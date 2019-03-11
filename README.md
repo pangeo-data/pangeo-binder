@@ -8,15 +8,11 @@ More details coming soon.
 How to deploy:
 ```
 cd helm-chart
-helm upgrade binder --install pangeo-binder --namespace=pangeo-binder --version=v0.1.0 -f ../deploy/common.yml -f ../deploy/binder_config.yml -f ../deploy/mybinder_secret.yaml
+helm upgrade --wait --install --namespace=prod prod pangeo-binder --version=v0.2.0 -f ../deploy/prod.yaml -f ../secrets/prod.yaml
 ```
 
 How to deploy staging:
 ```
 cd helm-chart
-helm upgrade binder --install pangeo-binder --namespace=staging --version=v0.1.0 -f ../deploy/common.yml -f ../deploy/staging_config.yml -f ../deploy/staging_secret.yaml
+helm upgrade --wait --install --namespace=staging staging pangeo-binder --version=v0.2.0 -f ../deploy/staging.yaml -f ../secrets/staging.yaml
 ```
-
-Ask @jhamman or @dsludwig for ``mybinder_secret.yaml`` or
-``staging_secret.yaml`` to deploy ``binder.pangeo.io`` or
-``staging.binder.pangeo.io``.
