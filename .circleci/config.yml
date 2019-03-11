@@ -1,4 +1,4 @@
-version: 1
+version: 2
 jobs:
   build:
   deploy:
@@ -52,12 +52,6 @@ workflows:
   version: 2
   build-and-deploy:
     jobs:
-      - build:
-          filters:
-            branches:
-              ignore:
-                - staging
-                - prod
       - deploy:
           filters:
             branches:
