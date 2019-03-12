@@ -19,4 +19,4 @@ binderhub:
 nginx-ingress:
   controller:
     service:
-      loadBalancerIP: 35.225.122.128
+      loadBalancerIP: 104.198.65.235
