@@ -12,20 +12,20 @@ binderhub:
       extra_static_url_prefix: /extra_static/
       about_message: |
         <p>binder.pangeo.io is public infrastructure operated by the <a href="https://pangeo.io">Pangeo Project team</a>.<br /><br />
-  # ingress:
-  #   enabled: true
-  #   annotations:
-  #     kubernetes.io/ingress.class: nginx
-  #   https:
-  #     enabled: true
-  #     type: kube-lego
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+    https:
+      enabled: true
+      type: kube-lego
   jupyterhub:
-    # ingress:
-    #     enabled: true
-    #     annotations:
-    #       ingress.kubernetes.io/proxy-body-size: 64m
-    #       kubernetes.io/ingress.class: nginx
-    #       kubernetes.io/tls-acme: 'true'
+    ingress:
+        enabled: true
+        annotations:
+          ingress.kubernetes.io/proxy-body-size: 64m
+          kubernetes.io/ingress.class: nginx
+          kubernetes.io/tls-acme: 'true'
     cull:
       # cull every 11 minutes so it is out of phase
       # with the proxy check-routes interval of five minutes
