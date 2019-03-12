@@ -12,7 +12,7 @@ binderhub:
       hosts:
         - staging.hub.binder.pangeo.io
       tls:
-        - secretName: kubelego-tls-jupyterhub-staging
+        - secretName: kubelego-tls-jupyterhub-staging-20190312-01
           hosts:
             - staging.hub.binder.pangeo.io
 
