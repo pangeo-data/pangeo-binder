@@ -53,6 +53,25 @@ binderhub:
         limits:
           cpu: "2"
           memory: 1Gi
+
+    proxy:
+      chp:
+        resources:
+          requests:
+            memory: 512Mi
+            cpu: "0.25"
+          limits:
+            memory: 512Mi
+            cpu: "0.5"
+      nginx:
+        resources:
+          requests:
+            memory: 1Gi
+            cpu: "0.25"
+          limits:
+            memory: 1Gi
+            cpu: 1
+
   initContainers:
     - name: git-clone-templates
       image: alpine/git
