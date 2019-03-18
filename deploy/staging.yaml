@@ -4,8 +4,7 @@ binderhub:
   config:
     BinderHub:
       build_node_selector:
-        nodeSelector:
-          cloud.google.com/gke-nodepool: jupyter-pool
+        cloud.google.com/gke-nodepool: jupyter-pool
       hub_url: https://hub.staging.binder.pangeo.io
       image_prefix: gcr.io/pangeo-181919/staging-
 
@@ -33,10 +32,10 @@ binderhub:
         - secretName: kubelego-tls-jupyterhub-staging
           hosts:
             - hub.staging.binder.pangeo.io
-    scheduling:
-      userScheduler:
-        nodeSelector:
-          cloud.google.com/gke-nodepool: default-pool
+    # scheduling:
+    #   userScheduler:
+    #     nodeSelector:
+    #       cloud.google.com/gke-nodepool: default-pool
 
 kube-lego:
   nodeSelector:
