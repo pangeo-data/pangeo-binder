@@ -1,14 +1,30 @@
+projectName: pangeo-binder-staging
+
 binderhub:
   config:
     BinderHub:
+      build_node_selector:
+        cloud.google.com/gke-nodepool: jupyter-pool
       hub_url: https://hub.staging.binder.pangeo.io
       image_prefix: gcr.io/pangeo-181919/staging-
+
+  nodeSelector:
+    cloud.google.com/gke-nodepool: default-pool
 
   ingress:
     hosts:
       - staging.binder.pangeo.io
 
   jupyterhub:
+    singleuser:
+      nodeSelector:
+        cloud.google.com/gke-nodepool: jupyter-pool
+    hub:
+      nodeSelector:
+        cloud.google.com/gke-nodepool: default-pool
+    proxy:
+      nodeSelector:
+        cloud.google.com/gke-nodepool: default-pool
     ingress:
       hosts:
         - hub.staging.binder.pangeo.io
@@ -16,6 +32,14 @@ binderhub:
         - secretName: kubelego-tls-jupyterhub-staging
           hosts:
             - hub.staging.binder.pangeo.io
+    # scheduling:
+    #   userScheduler:
+    #     nodeSelector:
+    #       cloud.google.com/gke-nodepool: default-pool
+
+kube-lego:
+  nodeSelector:
+    cloud.google.com/gke-nodepool: default-pool
 
 nginx-ingress:
   controller:

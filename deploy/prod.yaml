@@ -1,12 +1,30 @@
+projectName: pangeo-binder-prod
+
 binderhub:
   config:
     BinderHub:
+      build_node_selector:
+        cloud.google.com/gke-nodepool: jupyter-pool
       hub_url: https://hub.binder.pangeo.io
       image_prefix: gcr.io/pangeo-181919/prod-
+
+  nodeSelector:
+    cloud.google.com/gke-nodepool: default-pool
+
   ingress:
     hosts:
       - binder.pangeo.io
+
   jupyterhub:
+    singleuser:
+      nodeSelector:
+        cloud.google.com/gke-nodepool: jupyter-pool
+    hub:
+      nodeSelector:
+        cloud.google.com/gke-nodepool: default-pool
+    proxy:
+      nodeSelector:
+        cloud.google.com/gke-nodepool: default-pool
     ingress:
       hosts:
         - hub.binder.pangeo.io
@@ -14,6 +32,16 @@ binderhub:
         - secretName: kubelego-tls-jupyterhub-prod
           hosts:
             - hub.binder.pangeo.io
+    # scheduling:
+    # userPlaceholder:
+    #   replicas: 4
+    #   userScheduler:
+    #     nodeSelector:
+    #       cloud.google.com/gke-nodepool: default-pool
+
+kube-lego:
+  nodeSelector:
+    cloud.google.com/gke-nodepool: default-pool
 
 nginx-ingress:
   controller:
