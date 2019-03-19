@@ -7,7 +7,8 @@ binderhub:
         cloud.google.com/gke-nodepool: jupyter-pool
       hub_url: https://hub.binder.pangeo.io
       image_prefix: gcr.io/pangeo-181919/prod-
-
+      google_analytics_code: UA-120544092-2
+      google_analytics_domain: binder.pangeo.io
   nodeSelector:
     cloud.google.com/gke-nodepool: default-pool
 
