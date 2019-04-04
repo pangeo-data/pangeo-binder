@@ -5,8 +5,8 @@ binderhub:
   config:
     BinderHub:
       use_registry: true
-      build_image: jupyter/repo2docker:9766c954
-      per_repo_quota: 100
+      build_image: jupyter/repo2docker:8d8c21e5
+      per_repo_quota: 150
       template_path: /etc/binderhub/custom/templates
       extra_static_path: /etc/binderhub/custom/static
       extra_static_url_prefix: /extra_static/
@@ -52,8 +52,8 @@ binderhub:
         limit: 4
         guarantee: 1
       memory:
-        limit: 26G
-        guarantee: 4G
+        limit: 14G
+        guarantee: 3.5G
     hub:
       resources:
         requests:
@@ -103,6 +103,8 @@ binderhub:
   extraVolumeMounts:
     - name: custom-templates
       mountPath: /etc/binderhub/custom
+  dind:
+    enabled: True
 
 nginx-ingress:
   rbac:
