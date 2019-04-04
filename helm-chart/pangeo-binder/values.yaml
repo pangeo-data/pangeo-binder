@@ -6,7 +6,7 @@ binderhub:
     BinderHub:
       use_registry: true
       build_image: jupyter/repo2docker:8d8c21e5
-      per_repo_quota: 100
+      per_repo_quota: 150
       template_path: /etc/binderhub/custom/templates
       extra_static_path: /etc/binderhub/custom/static
       extra_static_url_prefix: /extra_static/
