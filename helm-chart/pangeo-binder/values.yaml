@@ -52,8 +52,8 @@ binderhub:
         limit: 4
         guarantee: 1
       memory:
-        limit: 26G
-        guarantee: 4G
+        limit: 14G
+        guarantee: 3.5G
     hub:
       resources:
         requests:
