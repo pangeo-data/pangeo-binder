@@ -15,6 +15,16 @@ binderhub:
     hosts:
       - staging.binder.pangeo.io
 
+  dind:
+    hostSocketDir: /var/run/dind/staging/docker.sock
+    resources:
+      requests:
+        cpu: "1"
+        memory: 2Gi
+      limits:
+        cpu: "2"
+        memory: 4Gi
+
   jupyterhub:
     singleuser:
       nodeSelector:
@@ -32,10 +42,6 @@ binderhub:
         - secretName: kubelego-tls-jupyterhub-staging
           hosts:
             - hub.staging.binder.pangeo.io
-    # scheduling:
-    #   userScheduler:
-    #     nodeSelector:
-    #       cloud.google.com/gke-nodepool: default-pool
 
 kube-lego:
   nodeSelector:
