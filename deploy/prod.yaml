@@ -17,7 +17,8 @@ binderhub:
       - binder.pangeo.io
 
   dind:
-    hostSocketDir: /var/run/dind/prod/docker.sock
+    hostLibDir: /var/lib/dind/prod
+    hostSocketDir: /var/run/dind/prod
 
   jupyterhub:
     singleuser:
