@@ -100,13 +100,6 @@ binderhub:
       image:
         name: docker
         tag: 18.09.2-dind
-    resources:
-      requests:
-        cpu: "2"
-        memory: 8Gi
-      limits:
-        cpu: "5"
-        memory: 12Gi
 
   imageCleaner:
     enabled: true
