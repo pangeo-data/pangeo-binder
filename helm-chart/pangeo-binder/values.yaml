@@ -5,7 +5,7 @@ binderhub:
   config:
     BinderHub:
       use_registry: true
-      build_image: jupyter/repo2docker:9bcc41af
+      build_image: jupyter/repo2docker:9099def4
       per_repo_quota: 150
       template_path: /etc/binderhub/custom/templates
       extra_static_path: /etc/binderhub/custom/static
@@ -26,15 +26,6 @@ binderhub:
           ingress.kubernetes.io/proxy-body-size: 64m
           kubernetes.io/ingress.class: nginx
           kubernetes.io/tls-acme: 'true'
-    # scheduling:
-    #   userScheduler:
-    #     enabled: true
-    #     replicas: 2
-    #   podPriority:
-    #     enabled: true
-    #   userPlaceholder:
-    #     enabled: true
-    #     replicas: 2
     cull:
       # cull every 11 minutes so it is out of phase
       # with the proxy check-routes interval of five minutes
@@ -44,7 +35,7 @@ binderhub:
       maxAge: 10800
     singleuser:
       serviceAccountName: daskkubernetes
-      # start jupyter notebook
+      # start jupyter lab
       cmd: jupyter-lab
       cloudMetadata:
         enabled: true
@@ -104,7 +95,27 @@ binderhub:
     - name: custom-templates
       mountPath: /etc/binderhub/custom
   dind:
-    enabled: True
+    enabled: true
+    daemonset:
+      image:
+        name: docker
+        tag: 18.09.2-dind
+    resources:
+      requests:
+        cpu: "2"
+        memory: 8Gi
+      limits:
+        cpu: "5"
+        memory: 12Gi
+
+  imageCleaner:
+    enabled: true
+    # when 80% of inodes are used,
+    # cull images until only 40% are used.
+    imageGCThresholdHigh: 80
+    imageGCThresholdLow: 40
+    host:
+      enabled: false
 
 nginx-ingress:
   rbac:
@@ -119,6 +130,13 @@ nginx-ingress:
     config:
       # Allow POSTs of upto 64MB, for large notebook support.
       proxy-body-size: 64m
+    resources:
+      requests:
+        cpu: 0.5
+        memory: 240Mi
+      limits:
+        cpu: 0.8
+        memory: 240Mi
    
     service:
       # Preserve client IPs

@@ -16,6 +16,9 @@ binderhub:
     hosts:
       - binder.pangeo.io
 
+  dind:
+    hostSocketDir: /var/run/dind/prod/docker.sock
+
   jupyterhub:
     singleuser:
       nodeSelector:
