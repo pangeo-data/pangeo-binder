@@ -16,16 +16,8 @@ binderhub:
       - staging.binder.pangeo.io
 
   dind:
-  dind:
     hostLibDir: /var/lib/dind/staging
     hostSocketDir: /var/run/dind/staging
-    resources:
-      requests:
-        cpu: "1"
-        memory: 2Gi
-      limits:
-        cpu: "2"
-        memory: 4Gi
 
   jupyterhub:
     singleuser:
