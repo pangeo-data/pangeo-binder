@@ -30,7 +30,10 @@ binderhub:
         - secretName: kubelego-tls-jupyterhub-staging
           hosts:
             - hub.staging.binder.pangeo.io
-
+    scheduling:
+      userScheduler:
+        enabled: true
+        replicas: 1
 kube-lego:
   nodeSelector:
     hub.jupyter.org/node-purpose: core

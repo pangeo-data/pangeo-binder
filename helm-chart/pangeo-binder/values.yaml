@@ -41,6 +41,9 @@ binderhub:
         enabled: true
       userPlaceholder:
         enabled: false
+      userPods:
+        nodeAffinity:
+          matchNodePurpose: require
     singleuser:
       serviceAccountName: daskkubernetes
       # start jupyter lab
