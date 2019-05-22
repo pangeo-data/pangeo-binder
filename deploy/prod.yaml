@@ -4,13 +4,13 @@ binderhub:
   config:
     BinderHub:
       build_node_selector:
-        cloud.google.com/gke-nodepool: jupyter-pool
+        hub.jupyter.org/node-purpose: user
       hub_url: https://hub.binder.pangeo.io
       image_prefix: gcr.io/pangeo-181919/prod-
       google_analytics_code: UA-120544092-2
       google_analytics_domain: binder.pangeo.io
   nodeSelector:
-    cloud.google.com/gke-nodepool: default-pool
+    hub.jupyter.org/node-purpose: core
 
   ingress:
     hosts:
@@ -21,15 +21,9 @@ binderhub:
     hostSocketDir: /var/run/dind/prod
 
   jupyterhub:
-    singleuser:
-      nodeSelector:
-        cloud.google.com/gke-nodepool: jupyter-pool
-    hub:
-      nodeSelector:
-        cloud.google.com/gke-nodepool: default-pool
     proxy:
       nodeSelector:
-        cloud.google.com/gke-nodepool: default-pool
+        hub.jupyter.org/node-purpose: core
     ingress:
       hosts:
         - hub.binder.pangeo.io
@@ -37,16 +31,10 @@ binderhub:
         - secretName: kubelego-tls-jupyterhub-prod
           hosts:
             - hub.binder.pangeo.io
-    # scheduling:
-    # userPlaceholder:
-    #   replicas: 4
-    #   userScheduler:
-    #     nodeSelector:
-    #       cloud.google.com/gke-nodepool: default-pool
 
 kube-lego:
   nodeSelector:
-    cloud.google.com/gke-nodepool: default-pool
+    hub.jupyter.org/node-purpose: core
 
 nginx-ingress:
   controller:

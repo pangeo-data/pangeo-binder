@@ -33,6 +33,14 @@ binderhub:
       timeout: 600
       # maxAge is 3 hours: 3 * 3600 = 10800
       maxAge: 10800
+    scheduling:
+      userScheduler:
+        enabled: true
+        replicas: 2
+      podPriority:
+        enabled: true
+      userPlaceholder:
+        enabled: false
     singleuser:
       serviceAccountName: daskkubernetes
       # start jupyter lab
@@ -41,10 +49,10 @@ binderhub:
         enabled: true
       cpu:
         limit: 4
-        guarantee: 1
+        guarantee: 2
       memory:
-        limit: 14G
-        guarantee: 3.5G
+        limit: 8G
+        guarantee: 8G
     hub:
       resources:
         requests:
