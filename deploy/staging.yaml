@@ -4,12 +4,12 @@ binderhub:
   config:
     BinderHub:
       build_node_selector:
-        cloud.google.com/gke-nodepool: jupyter-pool
+        hub.jupyter.org/node-purpose: user
       hub_url: https://hub.staging.binder.pangeo.io
       image_prefix: gcr.io/pangeo-181919/staging-
 
   nodeSelector:
-    cloud.google.com/gke-nodepool: default-pool
+    hub.jupyter.org/node-purpose: core
 
   ingress:
     hosts:
@@ -20,15 +20,9 @@ binderhub:
     hostSocketDir: /var/run/dind/staging
 
   jupyterhub:
-    singleuser:
-      nodeSelector:
-        cloud.google.com/gke-nodepool: jupyter-pool
-    hub:
-      nodeSelector:
-        cloud.google.com/gke-nodepool: default-pool
     proxy:
       nodeSelector:
-        cloud.google.com/gke-nodepool: default-pool
+        hub.jupyter.org/node-purpose: core
     ingress:
       hosts:
         - hub.staging.binder.pangeo.io
@@ -39,7 +33,7 @@ binderhub:
 
 kube-lego:
   nodeSelector:
-    cloud.google.com/gke-nodepool: default-pool
+    hub.jupyter.org/node-purpose: core
 
 nginx-ingress:
   controller:
