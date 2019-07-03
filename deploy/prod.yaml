@@ -6,6 +6,7 @@ binderhub:
       build_node_selector:
         hub.jupyter.org/node-purpose: user
       hub_url: https://hub.binder.pangeo.io
+      badge_base_url: https://binder.pangeo.io
       image_prefix: gcr.io/pangeo-181919/prod-
       google_analytics_code: UA-120544092-2
       google_analytics_domain: binder.pangeo.io
