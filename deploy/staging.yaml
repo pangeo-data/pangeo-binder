@@ -6,6 +6,7 @@ binderhub:
       build_node_selector:
         hub.jupyter.org/node-purpose: user
       hub_url: https://hub.staging.binder.pangeo.io
+      badge_base_url: https://staging.binder.pangeo.io
       image_prefix: gcr.io/pangeo-181919/staging-
 
   nodeSelector:
