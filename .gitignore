@@ -101,14 +101,14 @@ package-lock.json
 
 # Built files
 binderhub/static/dist
-helm-chart/pangeo-binder/requirements.lock
-helm-chart/pangeo-binder/charts
+pangeo-binder/requirements.lock
+pangeo-binder/charts
 
 # Instructions we download
 k8s.txt
 helm.txt
 travis
-helm-chart/travis-binder.yaml
+travis-binder.yaml
 
 # Secrets and
 deploy/*_secret.yaml

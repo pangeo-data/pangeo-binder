@@ -37,7 +37,7 @@ jobs:
             helm init --client-only
             helm repo add binderhub https://jupyterhub.github.io/helm-chart
             helm repo update
-            cd ~/repo/helm-chart/pangeo-binder
+            cd ~/repo/pangeo-binder
             helm dependency update
             cd -
 
@@ -52,12 +52,11 @@ jobs:
           name: Deploy binderhub
           when: always
           command: |
-            cd helm-chart
             helm upgrade --wait --install \
               ${CIRCLE_BRANCH} pangeo-binder \
               --namespace=${CIRCLE_BRANCH} --version=v0.2.0 \
-              -f ../deploy/${CIRCLE_BRANCH}.yaml \
-              -f ../secrets/${CIRCLE_BRANCH}.yaml
+              -f ./deploy/${CIRCLE_BRANCH}.yaml \
+              -f ./secrets/${CIRCLE_BRANCH}.yaml
 
 
 workflows:
