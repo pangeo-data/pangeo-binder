@@ -58,6 +58,22 @@ jobs:
               -f ./deploy/${CIRCLE_BRANCH}.yaml \
               -f ./secrets/${CIRCLE_BRANCH}.yaml
 
+      - run:
+          name: Test deployment
+          when: always  # TODO: only for prod and staging
+          command: |
+              if [[ ${CIRCLE_BRANCH} == staging ]]; then
+                binder="https://staging.binder.pangeo.io/"
+                hub="http://hub.staging.binder.pangeo.io/"
+              elif [[ ${CIRCLE_BRANCH} == prod ]]; then
+                binder="https://binder.pangeo.io/"
+                hub="http://hub.binder.pangeo.io/"
+              else;
+                echo "shouldn't be run for this branch" #&& exit 1
+              fi
+              travis_retry py.test -vx -n 2 \
+                --binder-url=${binder} \
+                --hub-url=${hub}
 
 workflows:
   version: 2
