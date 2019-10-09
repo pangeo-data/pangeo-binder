@@ -5,7 +5,7 @@ binderhub:
   config:
     BinderHub:
       use_registry: true
-      build_image: jupyter/repo2docker:0.10.0-83.g27eeef2
+      build_image: jupyter/repo2docker:0.10.0-100.g0dba611
       per_repo_quota: 150
       template_path: /etc/binderhub/custom/templates
       extra_static_path: /etc/binderhub/custom/static
@@ -36,7 +36,7 @@ binderhub:
     scheduling:
       userScheduler:
         enabled: true
-        replicas: 2
+        replicas: 1
       podPriority:
         enabled: true
       userPlaceholder:
@@ -62,7 +62,7 @@ binderhub:
           cpu: "0.25"
           memory: 512Mi
         limits:
-          cpu: "2"
+          cpu: "1.25"
           memory: 1Gi
 
     proxy:
@@ -128,7 +128,7 @@ nginx-ingress:
     minAvailable: 0
 
   controller:
-    replicaCount: 2
+    replicaCount: 1
     scope:
       enabled: true
     config:

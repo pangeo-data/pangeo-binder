@@ -33,8 +33,23 @@ binderhub:
             - hub.staging.binder.pangeo.io
     scheduling:
       userScheduler:
-        enabled: true
-        replicas: 1
+        enabled: false
+    hub:
+      resources:
+        requests:
+          cpu: "0.1"
+          memory: 125Mi
+    proxy:
+      chp:
+        resources:
+          requests:
+            memory: 100Mi
+            cpu: "0.1"
+      nginx:
+        resources:
+          requests:
+            memory: 100Mi
+            cpu: "0.1"
 kube-lego:
   nodeSelector:
     hub.jupyter.org/node-purpose: core
