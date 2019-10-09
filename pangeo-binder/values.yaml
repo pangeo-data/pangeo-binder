@@ -128,7 +128,7 @@ nginx-ingress:
     minAvailable: 0
 
   controller:
-    replicaCount: 2
+    replicaCount: 1
     scope:
       enabled: true
     config:
