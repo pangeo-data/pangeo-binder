@@ -36,7 +36,7 @@ binderhub:
     scheduling:
       userScheduler:
         enabled: true
-        replicas: 2
+        replicas: 1
       podPriority:
         enabled: true
       userPlaceholder:
@@ -62,7 +62,7 @@ binderhub:
           cpu: "0.25"
           memory: 512Mi
         limits:
-          cpu: "2"
+          cpu: "1.25"
           memory: 1Gi
 
     proxy:
