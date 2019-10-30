@@ -31,8 +31,6 @@ binderhub:
     cull:
       # don't cull authenticated users
       users: False
-      namedServerLimitPerUser: 5
-      redirectToServer: false
       # cull every 11 minutes so it is out of phase
       # with the proxy check-routes interval of five minutes
       every: 660
@@ -72,6 +70,8 @@ binderhub:
         limits:
           cpu: "1.25"
           memory: 1Gi
+      namedServerLimitPerUser: 5
+      redirectToServer: false
       allowNamedServers: true
       # change this value as you wish,
       # or remove this line if you don't want to have any limit
@@ -79,7 +79,7 @@ binderhub:
       redirectToServer: false
       services:
         binder:
-          oauth_redirect_uri: "https://hub.staging.binder.pangeo.io/hub/oauth_callback"
+          oauth_redirect_uri: "https://staging.binder.pangeo.io/hub/oauth_callback"
           oauth_client_id: "staging.binder.pangeo.io"
       extraConfig:
         binder: |
