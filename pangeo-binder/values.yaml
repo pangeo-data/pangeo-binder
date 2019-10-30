@@ -50,8 +50,6 @@ binderhub:
           matchNodePurpose: require
     singleuser:
       serviceAccountName: daskkubernetes
-      # start jupyter lab
-      cmd: jupyter-lab
       cloudMetadata:
         enabled: true
       cpu:
@@ -62,6 +60,8 @@ binderhub:
         guarantee: 8G
       # to make notebook servers aware of hub
       cmd: jupyterhub-singleuser
+      # start in jupyter lab
+      defaultUrl: "/lab"
     hub:
       resources:
         requests:
