@@ -70,7 +70,6 @@ binderhub:
         limits:
           cpu: "1.25"
           memory: 1Gi
-      namedServerLimitPerUser: 5
       redirectToServer: false
       allowNamedServers: true
       # change this value as you wish,
