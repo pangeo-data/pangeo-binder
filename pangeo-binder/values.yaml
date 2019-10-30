@@ -79,8 +79,8 @@ binderhub:
       redirectToServer: false
       services:
         binder:
-          oauth_redirect_uri: "http://binder.aws-useast1.pangeo.io/oauth_callback"
-          oauth_client_id: "binder-oauth-client-test"
+          oauth_redirect_uri: "hhttps://hub.staging.binder.pangeo.io/hub/oauth_callback"
+          oauth_client_id: "staging.binder.pangeo.io"
       extraConfig:
         binder: |
           from kubespawner import KubeSpawner
