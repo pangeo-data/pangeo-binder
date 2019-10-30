@@ -79,7 +79,7 @@ binderhub:
       redirectToServer: false
       services:
         binder:
-          oauth_redirect_uri: "hhttps://hub.staging.binder.pangeo.io/hub/oauth_callback"
+          oauth_redirect_uri: "https://hub.staging.binder.pangeo.io/hub/oauth_callback"
           oauth_client_id: "staging.binder.pangeo.io"
       extraConfig:
         binder: |
