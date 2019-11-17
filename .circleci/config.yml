@@ -57,6 +57,7 @@ jobs:
               --namespace=${CIRCLE_BRANCH} --version=v0.2.0 \
               -f ./deploy/${CIRCLE_BRANCH}.yaml \
               -f ./secrets/${CIRCLE_BRANCH}.yaml
+              -f ./secrets/common.yaml
 
 
 workflows:
