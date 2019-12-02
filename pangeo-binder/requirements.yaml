@@ -12,3 +12,6 @@ dependencies:
 - name: nginx-ingress
   version: 0.20.0
   repository: https://kubernetes-charts.storage.googleapis.com
+- name: dask-gateway
+  version: "0.5.0"
+  repository: 'https://dask.org/dask-gateway-helm-repo/'

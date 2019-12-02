@@ -36,6 +36,7 @@ jobs:
             sudo mv linux-amd64/helm /usr/local/bin
             helm init --client-only
             helm repo add binderhub https://jupyterhub.github.io/helm-chart
+            helm repo add dask-gateway https://dask.org/dask-gateway-helm-repo/
             helm repo update
             cd ~/repo/pangeo-binder
             helm dependency update
