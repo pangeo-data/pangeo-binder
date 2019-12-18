@@ -1,7 +1,7 @@
 # requirements.yaml
 dependencies:
 - name: binderhub
-  version: 0.2.0-a2079a5
+  version: 0.2.0-059.78bfbcd
   repository: https://jupyterhub.github.io/helm-chart/
   import-values:
     - child: rbac
