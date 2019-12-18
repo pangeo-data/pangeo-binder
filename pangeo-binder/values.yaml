@@ -4,8 +4,10 @@ binderhub:
 
   config:
     BinderHub:
+      build_image: jupyter/repo2docker:0.10.0-123.gf79bf04
       use_registry: true
-      build_image: jupyter/repo2docker:0.10.0-100.g0dba611
+      # use_named_servers: true  # turn back on to use auth
+      # auth_enabled: true  # turn back on to use auth
       per_repo_quota: 150
       template_path: /etc/binderhub/custom/templates
       extra_static_path: /etc/binderhub/custom/static
@@ -27,6 +29,8 @@ binderhub:
           kubernetes.io/ingress.class: nginx
           kubernetes.io/tls-acme: 'true'
     cull:
+      # don't cull authenticated users
+      # users: False  # turn back on to use auth
       # cull every 11 minutes so it is out of phase
       # with the proxy check-routes interval of five minutes
       every: 660
@@ -46,8 +50,6 @@ binderhub:
           matchNodePurpose: require
     singleuser:
       serviceAccountName: daskkubernetes
-      # start jupyter lab
-      cmd: jupyter-lab
       cloudMetadata:
         enabled: true
       cpu:
@@ -56,6 +58,11 @@ binderhub:
       memory:
         limit: 8G
         guarantee: 8G
+      cmd: jupyter-lab
+      # to make notebook servers aware of hub
+      # cmd: jupyterhub-singleuser  # turn back on to use auth
+      # start in jupyter lab
+      # defaultUrl: "/lab"  # turn back on to use auth
     hub:
       resources:
         requests:
@@ -64,7 +71,27 @@ binderhub:
         limits:
           cpu: "1.25"
           memory: 1Gi
+      # redirectToServer: false  # turn back on to use auth
+      # allowNamedServers: true  # turn back on to use auth
+      # change this value as you wish,
+      # or remove this line if you don't want to have any limit
+      # namedServerLimitPerUser: 5  # turn back on to use auth
+      # redirectToServer: false  # turn back on to use auth
+      # services:  # turn back on to use auth
+      #   binder:
+      #     oauth_redirect_uri: "https://staging.binder.pangeo.io/hub/oauth_callback"
+      #     oauth_client_id: "staging.binder.pangeo.io"
+      # extraConfig:
+      #   binder: |
+      #     from kubespawner import KubeSpawner
 
+      #     class BinderSpawner(KubeSpawner):
+      #       def start(self):
+      #           if 'image' in self.user_options:
+      #             # binder service sets the image spec via user options
+      #             self.image = self.user_options['image']
+      #           return super().start()
+      #     c.JupyterHub.spawner_class = BinderSpawner
     proxy:
       chp:
         resources:
