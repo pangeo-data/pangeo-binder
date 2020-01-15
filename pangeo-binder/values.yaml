@@ -4,7 +4,7 @@ binderhub:
 
   config:
     BinderHub:
-      build_image: jupyter/repo2docker:0.10.0-123.gf79bf04
+      build_image: jupyter/repo2docker:0.10.0-127.gd9335cf
       use_registry: true
       # use_named_servers: true  # turn back on to use auth
       # auth_enabled: true  # turn back on to use auth
