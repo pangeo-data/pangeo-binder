@@ -39,6 +39,11 @@ binderhub:
         requests:
           cpu: "0.1"
           memory: 125Mi
+      services:
+        dask-gateway:
+          # This makes the gateway available at ${HUB_URL}/services/dask-gateway
+          url: http://web-public-pangeo-binder-staging-dask-gateway
+
     proxy:
       chp:
         resources:
