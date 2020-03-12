@@ -184,9 +184,10 @@ kube-lego:
 
 gateway:
   clusterManager:
-    image:  # TODO
-      name: pangeo/base-notebook
-      tag: 2019.12.24
+    image:
+      name: daskgateway/dask-gateway-server
+      tag: 0.6.1
+      pullPolicy: IfNotPresent
     clusterStartTimeout: 600
     workerStartTimeout: 600
     worker:
