@@ -1,0 +1,37 @@
+name: Check for new versions of the repo2docker image
+
+on:
+  schedule:
+    - cron: "0 * * * *"
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    if: github.repository == 'pangeo-data/pangeo-binder'
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get latest Docker Hub tag
+        id: latest_tag
+        uses: jacobtomlinson/gha-get-docker-hub-tags@0.1.2
+        with:
+          org: "jupyter"
+          repo: "repo2docker"
+      - name: Find and Replace
+        uses: jacobtomlinson/gha-find-replace@0.1.0
+        with:
+          include: "pangeo-binder/"
+          find: "build_image: jupyter/repo2docker:.* "
+          replace: "build_image: jupyter/repo2docker:${{ steps.latest_tag.outputs.tag }} "
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "Update repo2docker version to ${{ steps.latest_tag.outputs.tag }}"
+          title: "Update repo2docker version to ${{ steps.latest_tag.outputs.tag }}"
+          reviewers: "jhamman"
+          branch: "upgrade-repo2docker-version"
+          body: |
+            A new repo2docker image version has been detected.
+
+            Updated chart to use `${{ steps.latest_tag.outputs.tag }}`.
