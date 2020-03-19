@@ -43,6 +43,8 @@ binderhub:
         dask-gateway:
           # This makes the gateway available at ${HUB_URL}/services/dask-gateway
           url: http://web-public-staging-dask-gateway
+      extraEnv:
+        DASK_GATEWAY__ADDRESS: "https://hub.staging.binder.pangeo.io/services/dask-gateway/"
 
     proxy:
       chp:
