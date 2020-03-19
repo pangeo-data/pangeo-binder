@@ -59,6 +59,11 @@ binderhub:
         limit: 8G
         guarantee: 8G
       cmd: jupyter-lab
+      extraEnv:
+        DASK_GATEWAY__ADDRESS': "http://web-public-staging-dask-gateway/services/dask-gateway/",
+        DASK_GATEWAY__PROXY_ADDRESS': "tls://scheduler-public-staging-dask-gateway:8786",
+        DASK_GATEWAY__AUTH__TYPE': "jupyterhub",
+
       # to make notebook servers aware of hub
       # cmd: jupyterhub-singleuser  # turn back on to use auth
       # start in jupyter lab
