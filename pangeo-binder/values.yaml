@@ -188,7 +188,6 @@ kube-lego:
 
 dask-gateway:
   gateway:
-    loglevel: DEBUG
     clusterManager:
       image:
         name: daskgateway/dask-gateway-server
