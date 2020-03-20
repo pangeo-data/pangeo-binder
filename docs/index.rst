@@ -52,7 +52,8 @@ Configuring Dask
 
 The Pangeo Binder is configured to include a Dask Gateway server, which allows
 users to create Dask Clusters for distributed computation. To create the clusters,
-**you must include the dask-gateway in your environment file**.
+we recommend depending on the ``pangeo-notebook`` metapackage. This metapackage
+brings in `several dependencies`_ including dask-gateway and dask-labextension.
 
 .. code-block:: yaml
 
@@ -60,8 +61,7 @@ users to create Dask Clusters for distributed computation. To create the cluster
    channels:
      - conda-forge
    dependencies:
-     - dask-gateway
-     - dask-labextension
+     - pangeo-notebook
      # Additional packages for your analysis...
 
 The version of dask-gateway pre-configured on the Binder must
@@ -128,3 +128,4 @@ Examples using Pangeo's Binder
 .. _Kubernetes: https://kubernetes.io/
 .. _Pangeo Example Notebooks: https://github.com/pangeo-data/pangeo-example-notebooks
 .. _Dask Gateway: https://gateway.dask.org/
+.. _several dependencies: https://github.com/conda-forge/pangeo-notebook-feedstock/blob/master/recipe/meta.yaml
