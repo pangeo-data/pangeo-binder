@@ -27,6 +27,7 @@ jobs:
             source venv/bin/activate
             curl -sSL https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-226.0.0-linux-x86_64.tar.gz | tar -C venv/ -xzf -
             echo 'export PATH="${HOME}/repo/venv/bin:${HOME}/repo/venv/google-cloud-sdk/bin:${PATH}"' >> ${BASH_ENV}
+
       - run:
           name: Install helm
           when: always
@@ -36,7 +37,9 @@ jobs:
             sudo mv linux-amd64/helm /usr/local/bin
             helm init --client-only
             helm repo add binderhub https://jupyterhub.github.io/helm-chart
+            helm repo add dask-gateway https://dask.org/dask-gateway-helm-repo/
             helm repo update
+
             cd ~/repo/pangeo-binder
             helm dependency update
             cd -

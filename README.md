@@ -12,7 +12,7 @@ prod | [![CircleCI](https://circleci.com/gh/pangeo-data/pangeo-binder/tree/prod.
 
 # About Pangeo's Binder
 
-Much like [mybinder.org](https://mybinder.org), the [Pangeo's](https://pangeo.io/) BinderHub deployment ([binder.pangeo.io](https://binder.pangeo.io/)) allows users to create and share custom computing environments. The main distinction between the two BinderHubs is that Pangeo's BinderHub allows users to perform scalable computations using the dask-kubernetes package.
+Much like [mybinder.org](https://mybinder.org), the [Pangeo's](https://pangeo.io/) BinderHub deployment ([binder.pangeo.io](https://binder.pangeo.io/)) allows users to create and share custom computing environments. The main distinction between the two BinderHubs is that Pangeo's BinderHub allows users to perform scalable computations using Dask.
 
 For more information on the Pangeo project, check out the [online documentation](http://pangeo-binder.readthedocs.io/).
 
