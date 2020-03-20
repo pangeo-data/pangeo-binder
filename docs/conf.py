@@ -234,7 +234,8 @@ texinfo_documents = [
 intersphinx_mapping = {'jupyter': ('https://jupyter.readthedocs.io/en/latest/', None),
                        'dask': ('http://dask.pydata.org/en/latest/', None),
                        'dask-kubernetes': ('https://dask-kubernetes.readthedocs.io/en/latest/', None),
-                       'pangeo': ('http://pangeo.io/', None)}
+                       'pangeo': ('http://pangeo.io/', None),
+                       'dask-gateway': ('https://gateway.dask.org/', None)}
 # -- Options for todo extension ----------------------------------------------
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
