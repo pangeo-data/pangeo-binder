@@ -17,7 +17,7 @@ About Pangeo's Binder
 Much like mybinder.org_, the `Pangeo's`_ BinderHub deployment (`binder.pangeo.io`_)
 allows users to create and share custom computing environments. The main distinction
 between the two BinderHubs is that Pangeo's BinderHub allows users to perform
-scalable computations using the dask-kubernetes package.
+scalable computations using `Dask Gateway`_.
 
 For more information on the Pangeo project, check out the `online documentation`_.
 
@@ -47,60 +47,43 @@ After running the cookiecutter command, simply follow the command line instructi
 to compete setting up your repository. Add some Jupyter Notebooks, configure your
 environment and push the whole thing to GitHub.
 
-Configuring dask-kubernetes
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Configuring Dask
+~~~~~~~~~~~~~~~~
 
-`Dask-kubernetes`_ is a library designed to deploy dask-distributed using
-Kubernetes_. When using dask-kubernetes on binder, you need to specify some
-basic configuration options. An example of a file named `.dask/config.yaml`.
+The Pangeo Binder is configured to include a Dask Gateway server, which allows
+users to create Dask Clusters for distributed computation. To create the clusters,
+we recommend depending on the ``pangeo-notebook`` metapackage. This metapackage
+brings in `several dependencies`_ including dask-gateway and dask-labextension.
 
-.. .dask/config.yaml
+.. code-block:: yaml
 
-::
+   # binder/environment.yml
+   channels:
+     - conda-forge
+   dependencies:
+     - pangeo-notebook
+     # Additional packages for your analysis...
 
-  # .dask/config.yaml
-  fuse_subgraphs: False
-  fuse_ave_width: 0
+The version of dask-gateway pre-configured on the Binder must
+match the dask-gateway in the ``environment.yml``. That's currently
+``dask-gateway==0.6.1``.
 
-  distributed:
-    logging:
-      bokeh: critical
+With Dask Gateway installed, your notebooks can create clusters:
 
-    dashboard:
-      link: /user/{JUPYTERHUB_USER}/proxy/{port}/status
+.. code-block:: python
 
-    admin:
-      tick:
-        limit: 5s
+   from dask_gateway import Gateway
+   from dask.distributed import Client
 
-  kubernetes:
-    count:
-      max: 50
-    worker-template:
-      metadata:
-      spec:
-        nodeSelector:
-          dask-worker: True
-        restartPolicy: Never
-        containers:
-        - args:
-            - dask-worker
-            - --nthreads
-            - '2'
-            - --no-bokeh
-            - --memory-limit
-            - 7GB
-            - --death-timeout
-            - '60'
-          image: ${JUPYTER_IMAGE_SPEC}
-          name: dask-worker
-          resources:
-            limits:
-              cpu: "1.75"
-              memory: 7G
-            requests:
-              cpu: 1
-              memory: 7G
+   gateway = Gateway()
+   cluster = gateway.new_cluster()
+
+   client = Client(cluster)
+
+You can use :meth:`dask_gateway.GatewayCluster.scale` to scale the number
+of workers manually, or set the cluster to adaptive mode with
+:meth:`dask_gateway.GatewayCluster.adapt` to scale up and down based on
+computational load.
 
 start script
 ~~~~~~~~~~~~
@@ -144,3 +127,5 @@ Examples using Pangeo's Binder
 .. _Dask-kubernetes: https://dask-kubernetes.readthedocs.io/en/latest/
 .. _Kubernetes: https://kubernetes.io/
 .. _Pangeo Example Notebooks: https://github.com/pangeo-data/pangeo-example-notebooks
+.. _Dask Gateway: https://gateway.dask.org/
+.. _several dependencies: https://github.com/conda-forge/pangeo-notebook-feedstock/blob/master/recipe/meta.yaml
