@@ -1,0 +1,34 @@
+projectName: pangeo-binder-staging
+binderhub:
+  config:
+    BinderHub:
+      hub_url: https://hub.aws-uswest2-binder.pangeo.io
+  ingress:
+    hosts:
+      - aws-uswest2-binder.pangeo.io
+  dind:
+    hostLibDir: /var/lib/dind/staging
+    hostSocketDir: /var/run/dind/staging
+
+# Comment this section for first deployment w/o https
+  jupyterhub:
+    proxy:
+      https:
+        hosts:
+          - hub.aws-uswest2-binder.pangeo.io
+        letsencrypt:
+          contactEmail: scottyh@uw.edu
+
+
+    ingress:
+      enabled: true
+      annotations:
+        ingress.kubernetes.io/proxy-body-size: 64m
+        kubernetes.io/ingress.class: nginx
+        kubernetes.io/tls-acme: 'true'
+      hosts:
+        - hub.aws-uswest2-binder.pangeo.io
+      tls:
+        - secretName: kubelego-tls-jupyterhub-staging
+          hosts:
+            - hub.aws-uswest2-binder.pangeo.io
