@@ -49,6 +49,7 @@ binderhub:
         nodeAffinity:
           matchNodePurpose: require
     singleuser:
+      serviceAccountName: daskkubernetes
       cloudMetadata:
         enabled: true
       cpu:
