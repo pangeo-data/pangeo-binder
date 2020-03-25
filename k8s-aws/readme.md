@@ -23,6 +23,7 @@ kubectl apply -f cluster-autoscaler.yml
 ##### Deploy binderhub
 ```
 export CIRCLE_BRANCH=staging
+kubectl create namespace $CIRCLE_BRANCH
 helm upgrade --wait --install ${CIRCLE_BRANCH} pangeo-binder --namespace=${CIRCLE_BRANCH} --version=v0.2.0 -f ./deploy-aws/${CIRCLE_BRANCH}-install.yaml -f ./secrets-aws/${CIRCLE_BRANCH}-install.yaml --cleanup-on-fail
 ```
 NOTE: confirm non-https deployment working by `kubectl get pods -A` and going to external-ip from `kubectl get svc binder -n $CIRCLE_BRANCH`

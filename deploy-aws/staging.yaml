@@ -28,15 +28,10 @@ binderhub:
         hosts:
           - staging.aws-uswest2-binder.pangeo.io
 
-#  uncomment to use dind
-#  dind:
-#    enabled: true
-#    hostLibDir: /var/lib/dind/stage
-#    hostSocketDir: /var/run/dind/stage
-#  imageCleaner:
-#    enabled: true
-#    host:
-#      enabled: false
+  dind:
+    enabled: true
+    hostLibDir: /var/lib/dind/stage
+    hostSocketDir: /var/run/dind/stage
 
   jupyterhub:
     proxy:
