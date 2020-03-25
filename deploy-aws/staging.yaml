@@ -1,0 +1,65 @@
+projectName: pangeo-binder-aws-staging
+
+binderhub:
+  config:
+    BinderHub:
+      build_node_selector:
+        hub.jupyter.org/node-purpose: user
+      hub_url: https://hub.staging.aws-uswest2-binder.pangeo.io
+      badge_base_url: https://staging.aws-uswest2-binder.pangeo.io
+      image_prefix: pangeoaccess/binder-staging-
+      use_registry: true
+  nodeSelector:
+    hub.jupyter.org/node-purpose: core
+  
+  ingress:
+    enabled: true
+    hosts:
+      - staging.aws-uswest2-binder.pangeo.io
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
+      cert-manager.io/issuer: letsencrypt-production
+      https:
+        enabled: true
+        type: nginx
+    tls:
+      - secretName: staging-aws-uswest2-binder-pangeo-io-tls
+        hosts:
+          - staging.aws-uswest2-binder.pangeo.io
+
+  dind:
+    enabled: true
+    hostLibDir: /var/lib/dind/stage
+    hostSocketDir: /var/run/dind/stage
+
+  jupyterhub:
+    proxy:
+      nodeSelector:
+        hub.jupyter.org/node-purpose: core
+
+    ingress:
+      enabled: true
+      hosts:
+        - hub.staging.aws-uswest2-binder.pangeo.io
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        kubernetes.io/tls-acme: "true"
+        cert-manager.io/issuer: letsencrypt-production
+        https:
+          enabled: true
+          type: nginx
+      tls:
+         - secretName: hub-staging-aws-uswest2-binder-pangeo-io-tls
+           hosts:
+            - hub.staging.aws-uswest2-binder.pangeo.io
+    singleuser:
+      extraEnv:
+        DASK_GATEWAY__ADDRESS: "https://hub.staging.aws-uswest2-binder.pangeo.io/services/dask-gateway/"
+        DASK_GATEWAY__PROXY_ADDRESS: "tls://scheduler-public-staging-dask-gateway:8786" 
+    hub:
+      services:
+        dask-gateway:
+          # This makes the gateway available at ${HUB_URL}/services/dask-gateway
+          url: http://web-public-staging-dask-gateway
+

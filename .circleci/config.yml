@@ -25,6 +25,7 @@ jobs:
             python3 --version
             python3 -m venv venv
             source venv/bin/activate
+            pip3 install awscli==1.18.27
             curl -sSL https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-226.0.0-linux-x86_64.tar.gz | tar -C venv/ -xzf -
             echo 'export PATH="${HOME}/repo/venv/bin:${HOME}/repo/venv/google-cloud-sdk/bin:${PATH}"' >> ${BASH_ENV}
 
@@ -53,7 +54,7 @@ jobs:
             gcloud container clusters --zone=us-central1-b --project=pangeo-181919 get-credentials binder
 
       - run:
-          name: Deploy binderhub
+          name: Deploy Google binderhub
           when: always
           command: |
             helm upgrade --wait --install \
@@ -63,6 +64,32 @@ jobs:
               -f ./secrets/${CIRCLE_BRANCH}.yaml \
               -f ./secrets/common.yaml
 
+      # AWS deployment
+      # --------------
+      - run:
+          name: Add Runner IP to EKS Kubernetes API Whitelist
+          when: always
+          command: |
+            AWS_SHARED_CREDENTIALS_FILE=./secrets-aws/aws-config.txt
+            RUNNERIP=`curl --silent https://checkip.amazonaws.com`
+            aws --version
+            aws eks update-cluster-config --region us-west-2 --name pangeo --resources-vpc-config publicAccessCidrs=${RUNNERIP}/32 > /dev/null
+            sleep 90
+      - run:
+          name: Deploy AWS binderhub
+          when: always
+          command: |
+            helm upgrade --wait --install \
+              ${CIRCLE_BRANCH} pangeo-binder \
+              --namespace=${CIRCLE_BRANCH} --version=v0.2.0 \
+              -f ./deploy-aws/${CIRCLE_BRANCH}.yaml \
+              -f ./secrets-aws/${CIRCLE_BRANCH}.yaml
+      - run:
+          name: Revert to Original EKS IP Whitelist
+          when: always
+          command: |
+            AWS_SHARED_CREDENTIALS_FILE=./secrets-aws/aws-config.txt
+            aws eks update-cluster-config --region us-west-2 --name pangeo --resources-vpc-config publicAccessCidrs=${AWS_IP_WHITELIST} > /dev/null
 
 workflows:
   version: 2

@@ -49,6 +49,7 @@ binderhub:
         nodeAffinity:
           matchNodePurpose: require
     singleuser:
+      # https://github.com/pangeo-data/pangeo-binder/issues/129
       serviceAccountName: daskkubernetes
       cloudMetadata:
         enabled: true
@@ -136,13 +137,13 @@ binderhub:
   extraVolumeMounts:
     - name: custom-templates
       mountPath: /etc/binderhub/custom
+  
   dind:
     enabled: true
     daemonset:
       image:
         name: docker
-        tag: 18.09.2-dind
-
+        tag: 19.03.5-dind
   imageCleaner:
     enabled: true
     # when 80% of inodes are used,
@@ -197,16 +198,19 @@ dask-gateway:
       workerStartTimeout: 600
       worker:
         extraPodConfig:
+#          serviceAccountName: pangeo
           tolerations:
-            - key: "k8s.dask.org_dedicated"
+            - key: "k8s.dask.org/dedicated"
               operator: "Equal"
               value: "worker"
+              effect: "NoSchedule"
       scheduler:
         extraPodConfig:
           tolerations:
-            - key: "k8s.dask.org_dedicated"
+            - key: "k8s.dask.org/dedicated"
               operator: "Equal"
-              value: "worker"
+              value: "scheduler"
+              effect: "NoSchedule"
     extraConfig:
       # Use the mapping form, to support merging multiple values.yaml
       optionHandler: |
