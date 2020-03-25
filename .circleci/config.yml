@@ -80,8 +80,8 @@ jobs:
           when: always
           command: |
             helm upgrade --wait --install \
-              binder-${CIRCLE_BRANCH} pangeo-binder \
-              --namespace=binder-${CIRCLE_BRANCH} --version=v0.2.0 \
+              ${CIRCLE_BRANCH} pangeo-binder \
+              --namespace=${CIRCLE_BRANCH} --version=v0.2.0 \
               -f ./deploy-aws/${CIRCLE_BRANCH}.yaml \
               -f ./secrets-aws/${CIRCLE_BRANCH}.yaml
       - run:

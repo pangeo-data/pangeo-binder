@@ -1,0 +1,28 @@
+projectName: pangeo-binder-aws-staging
+binderhub:
+  config:
+    BinderHub:
+      use_registry: true
+      image_prefix: pangeoaccess/binder-staging-
+  ingress:
+   https:
+    enabled: false
+
+  jupyterhub:
+    ingress:
+      enabled: false
+
+  dind:
+    enabled: false
+    daemonset:
+      image:
+        name: docker
+        tag: 19.03.5-dind
+  imageCleaner:
+    enabled: true
+    # when 80% of inodes are used,
+    # cull images until only 40% are used.
+    imageGCThresholdHigh: 80
+    imageGCThresholdLow: 40
+    host:
+      enabled: true
