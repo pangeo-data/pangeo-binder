@@ -88,12 +88,12 @@ jobs:
           name: Deploy AWS binderhub
           when: always
           command: |
-#             helm history ${CIRCLE_BRANCH} -n ${CIRCLE_BRANCH}
             helm upgrade --wait --install \
               ${CIRCLE_BRANCH} pangeo-binder \
               --namespace=${CIRCLE_BRANCH} --version=v0.2.0 \
               -f ./deploy-aws/${CIRCLE_BRANCH}.yaml \
               -f ./secrets-aws/${CIRCLE_BRANCH}.yaml
+            #helm history ${CIRCLE_BRANCH} -n ${CIRCLE_BRANCH}
       - run:
           name: Revert to Original EKS IP Whitelist
           when: always
