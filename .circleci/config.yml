@@ -70,16 +70,17 @@ jobs:
           name: Authenticate to AWS k8s cluster
           when: always
           command: |
-            AWS_SHARED_CREDENTIALS_FILE=~/repo/secrets-aws/aws-config.txt
+            AWS_SHARED_CREDENTIALS_FILE=/home/circleci/repo/secrets-aws/aws-config.txt
             aws --version
             echo $PWD
             ls
             aws eks --region us-west-2 update-kubeconfig --name pangeo-binder
+            aws eks list-clusters --region us-west-2
       - run:
           name: Add Runner IP to EKS Kubernetes API Whitelist
           when: always
           command: |
-            AWS_SHARED_CREDENTIALS_FILE=~/repo/secrets-aws/aws-config.txt
+            AWS_SHARED_CREDENTIALS_FILE=/home/circleci/repo/secrets-aws/aws-config.txt
             RUNNERIP=`curl --silent https://checkip.amazonaws.com`
             aws eks update-cluster-config --region us-west-2 --name pangeo --resources-vpc-config publicAccessCidrs=${RUNNERIP}/32 > /dev/null
             sleep 90
