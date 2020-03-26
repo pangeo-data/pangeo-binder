@@ -204,6 +204,10 @@ dask-gateway:
               operator: "Equal"
               value: "worker"
               effect: "NoSchedule"
+            - key: "k8s.dask.org/dedicated"
+              operator: "Equal"
+              value: "worker"
+              effect: "NoSchedule"
       scheduler:
         extraPodConfig:
           tolerations:
@@ -211,6 +215,11 @@ dask-gateway:
               operator: "Equal"
               value: "scheduler"
               effect: "NoSchedule"
+            - key: "k8s.dask.org/dedicated"
+              operator: "Equal"
+              value: "scheduler"
+              effect: "NoSchedule"
+
     extraConfig:
       # Use the mapping form, to support merging multiple values.yaml
       optionHandler: |
