@@ -47,7 +47,7 @@ jobs:
             cd -
 
       - run:
-          name: Authenticate to k8s cluster
+          name: Authenticate to Google k8s cluster
           when: always
           command: |
             gcloud auth activate-service-account --key-file ~/repo/secrets/gcloud-service-key.json
@@ -67,12 +67,20 @@ jobs:
       # AWS deployment
       # --------------
       - run:
+          name: Authenticate to AWS k8s cluster
+          when: always
+          command: |
+            AWS_SHARED_CREDENTIALS_FILE=~/repo/secrets-aws/aws-config.txt
+            aws --version
+            echo $PWD
+            ls
+            aws eks --region us-west-2 update-kubeconfig --name pangeo-binder
+      - run:
           name: Add Runner IP to EKS Kubernetes API Whitelist
           when: always
           command: |
             AWS_SHARED_CREDENTIALS_FILE=~/repo/secrets-aws/aws-config.txt
             RUNNERIP=`curl --silent https://checkip.amazonaws.com`
-            aws --version
             aws eks update-cluster-config --region us-west-2 --name pangeo --resources-vpc-config publicAccessCidrs=${RUNNERIP}/32 > /dev/null
             sleep 90
       - run:
