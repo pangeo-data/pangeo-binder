@@ -70,7 +70,7 @@ jobs:
           name: Add Runner IP to EKS Kubernetes API Whitelist
           when: always
           command: |
-            AWS_SHARED_CREDENTIALS_FILE=./secrets-aws/aws-config.txt
+            AWS_SHARED_CREDENTIALS_FILE=~/repo/secrets-aws/aws-config.txt
             RUNNERIP=`curl --silent https://checkip.amazonaws.com`
             aws --version
             aws eks update-cluster-config --region us-west-2 --name pangeo --resources-vpc-config publicAccessCidrs=${RUNNERIP}/32 > /dev/null
@@ -79,16 +79,17 @@ jobs:
           name: Deploy AWS binderhub
           when: always
           command: |
-            helm upgrade --wait --install \
-              ${CIRCLE_BRANCH} pangeo-binder \
-              --namespace=${CIRCLE_BRANCH} --version=v0.2.0 \
-              -f ./deploy-aws/${CIRCLE_BRANCH}.yaml \
-              -f ./secrets-aws/${CIRCLE_BRANCH}.yaml
+             helm history ${CIRCLE_BRANCH} -n ${CIRCLE_BRANCH}
+#            helm upgrade --wait --install \
+#              ${CIRCLE_BRANCH} pangeo-binder \
+#              --namespace=${CIRCLE_BRANCH} --version=v0.2.0 \
+#              -f ./deploy-aws/${CIRCLE_BRANCH}.yaml \
+#              -f ./secrets-aws/${CIRCLE_BRANCH}.yaml
       - run:
           name: Revert to Original EKS IP Whitelist
           when: always
           command: |
-            AWS_SHARED_CREDENTIALS_FILE=./secrets-aws/aws-config.txt
+            AWS_SHARED_CREDENTIALS_FILE=~/repo/secrets-aws/aws-config.txt
             aws eks update-cluster-config --region us-west-2 --name pangeo --resources-vpc-config publicAccessCidrs=${AWS_IP_WHITELIST} > /dev/null
 
 workflows:
