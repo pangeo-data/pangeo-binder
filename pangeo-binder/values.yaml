@@ -199,6 +199,7 @@ dask-gateway:
       worker:
         extraPodConfig:
           serviceAccountName: pangeo
+          automountServiceAccountToken: true
           tolerations:
             - key: "k8s.dask.org/dedicated"
               operator: "Equal"
