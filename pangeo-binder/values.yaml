@@ -200,6 +200,13 @@ dask-gateway:
         extraPodConfig:
           serviceAccountName: pangeo
           automountServiceAccountToken: true
+          securityContext:
+            fsGroup: 100
+# jupyter singleuser container has: 
+#          containers:
+#            securityContext:
+#              runAsGroup: 0
+#              runAsUser: 1000
           tolerations:
             - key: "k8s.dask.org/dedicated"
               operator: "Equal"
