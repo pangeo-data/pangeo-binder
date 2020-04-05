@@ -197,9 +197,10 @@ dask-gateway:
       clusterStartTimeout: 600
       workerStartTimeout: 600
       worker:
-        securityContext:
-          runAsGroup: 1000
-          runAsUser: 1000
+        extraContainerConfig:
+          securityContext:
+            runAsGroup: 1000
+            runAsUser: 1000
         extraPodConfig:
           serviceAccountName: pangeo
           automountServiceAccountToken: true
