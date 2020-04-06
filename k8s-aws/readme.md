@@ -46,6 +46,13 @@ kubectl apply -f binderhub-issuer-${CIRCLE_BRANCH}.yaml
 ```
 You should now have a functioning binderhub at https://staging.aws-uswest2-binder.pangeo.io !!!
 
+##### link IAM role to pangeo service account
+For singleuser notebook pods and dask worker pods 
+see https://eksctl.io/usage/iamserviceaccounts/
+```
+eksctl create iamserviceaccount --config-file=eksctl-config.yml --override-existing-serviceaccounts
+```
+
 
 ##### Removing things:
 you can get rid of resources created with `kubectl apply` with `kubectl delete`:
@@ -56,4 +63,9 @@ kubectl delete -f https://github.com/jetstack/cert-manager/releases/download/v0.
 Or tear everything down with
 ```
 helm delete staging -n staging
+```
+
+Other cheatsheet commands:
+```
+eksctl delete iamserviceaccount --cluster pangeo-binder --name pangeo --namespace staging
 ```

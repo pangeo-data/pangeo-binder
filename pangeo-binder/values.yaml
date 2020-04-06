@@ -50,7 +50,7 @@ binderhub:
           matchNodePurpose: require
     singleuser:
       # https://github.com/pangeo-data/pangeo-binder/issues/129
-      serviceAccountName: daskkubernetes
+      serviceAccountName: pangeo
       cloudMetadata:
         enabled: true
       cpu:
@@ -137,7 +137,7 @@ binderhub:
   extraVolumeMounts:
     - name: custom-templates
       mountPath: /etc/binderhub/custom
-  
+
   dind:
     enabled: true
     daemonset:
@@ -173,7 +173,7 @@ nginx-ingress:
       limits:
         cpu: 0.5
         memory: 240Mi
-   
+
     service:
       # Preserve client IPs
       externalTrafficPolicy: Local
@@ -197,8 +197,15 @@ dask-gateway:
       clusterStartTimeout: 600
       workerStartTimeout: 600
       worker:
+        extraContainerConfig:
+          securityContext:
+            runAsGroup: 1000
+            runAsUser: 1000
         extraPodConfig:
-#          serviceAccountName: pangeo
+          serviceAccountName: pangeo
+          automountServiceAccountToken: true
+          securityContext:
+            fsGroup: 1000
           tolerations:
             - key: "k8s.dask.org/dedicated"
               operator: "Equal"
