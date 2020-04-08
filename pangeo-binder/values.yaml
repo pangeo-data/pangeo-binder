@@ -189,6 +189,7 @@ kube-lego:
 
 dask-gateway:
   gateway:
+    prefix: "/services/dask-gateway"
     image:
       name: daskgateway/dask-gateway-server
       tag: 0.7.0
@@ -227,12 +228,6 @@ dask-gateway:
               value: "worker"
               effect: "NoSchedule"
   
-    # clusterManager is not needed anymore
-    # TODO: where did timeouts go?
-    # clusterManager:
-    #   clusterStartTimeout: 600
-    #   workerStartTimeout: 600
-
     extraConfig:
       # Use the mapping form, to support merging multiple values.yaml
       optionHandler: |
@@ -247,18 +242,18 @@ dask-gateway:
                 "worker_memory": "%fG" % options.worker_memory,
                 "image": options.image,
             }
-        c.DaskGateway.cluster_manager_options = Options(
+        c.Backend.cluster_options = Options(
             Integer("worker_cores", 2, min=1, max=4, label="Worker Cores"),
             Float("worker_memory", 4, min=1, max=8, label="Worker Memory (GiB)"),
             String("image", default="pangeo/base-notebook:2019.12.24", label="Image"),
             handler=option_handler,
         )
 
-      userLimts: |
-        c.UserLimits.max_cores = 100
-        c.UserLimits.max_memory = "400 G"
-        c.UserLimits.max_clusters = 1
-
-      tlsURL: |
-        if isinstance(c.DaskGateway.public_connect_url, str):
-            c.DaskGateway.public_connect_url += "/services/dask-gateway"
+      # TODO: replace with some k8s things
+      # resource quota. per namespace.
+      # on binder, so might need some thought.
+      # maybe max time for now.
+      # userLimts: |
+      #   c.UserLimits.max_cores = 100
+      #   c.UserLimits.max_memory = "400 G"
+      #   c.UserLimits.max_clusters = 1
