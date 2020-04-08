@@ -189,13 +189,24 @@ kube-lego:
 
 dask-gateway:
   gateway:
-    clusterManager:
-      image:
-        name: daskgateway/dask-gateway-server
-        tag: 0.7.0
-        pullPolicy: IfNotPresent
-      clusterStartTimeout: 600
-      workerStartTimeout: 600
+    image:
+      name: daskgateway/dask-gateway-server
+      tag: 0.7.0
+      pullPolicy: IfNotPresent
+
+    backend:
+      scheduler:
+        extraPodConfig:
+          tolerations:
+            - key: "k8s.dask.org/dedicated"
+              operator: "Equal"
+              value: "scheduler"
+              effect: "NoSchedule"
+            - key: "k8s.dask.org_dedicated"
+              operator: "Equal"
+              value: "scheduler"
+              effect: "NoSchedule"
+
       worker:
         extraContainerConfig:
           securityContext:
@@ -215,17 +226,12 @@ dask-gateway:
               operator: "Equal"
               value: "worker"
               effect: "NoSchedule"
-      scheduler:
-        extraPodConfig:
-          tolerations:
-            - key: "k8s.dask.org/dedicated"
-              operator: "Equal"
-              value: "scheduler"
-              effect: "NoSchedule"
-            - key: "k8s.dask.org_dedicated"
-              operator: "Equal"
-              value: "scheduler"
-              effect: "NoSchedule"
+  
+    # clusterManager is not needed anymore
+    # TODO: where did timeouts go?
+    # clusterManager:
+    #   clusterStartTimeout: 600
+    #   workerStartTimeout: 600
 
     extraConfig:
       # Use the mapping form, to support merging multiple values.yaml
