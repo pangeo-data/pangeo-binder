@@ -192,7 +192,7 @@ dask-gateway:
     clusterManager:
       image:
         name: daskgateway/dask-gateway-server
-        tag: 0.6.1
+        tag: 0.7.0
         pullPolicy: IfNotPresent
       clusterStartTimeout: 600
       workerStartTimeout: 600
