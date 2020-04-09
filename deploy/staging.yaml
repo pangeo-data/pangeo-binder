@@ -47,7 +47,7 @@ binderhub:
       services:
         dask-gateway:
           # This makes the gateway available at ${HUB_URL}/services/dask-gateway
-          url: http://web-public-staging-dask-gateway
+          url: http://traefik-staging-dask-gateway.dask-gateway
 
     proxy:
       chp:
