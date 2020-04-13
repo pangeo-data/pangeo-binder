@@ -36,8 +36,7 @@ binderhub:
         enabled: false
     singleuser:
       extraEnv:
-        DASK_GATEWAY__ADDRESS: "https://hub.staging.binder.pangeo.io/services/dask-gateway/"
-        DASK_GATEWAY__PROXY_ADDRESS: "tls://scheduler-public-staging-dask-gateway:8786"
+        DASK_GATEWAY__ADDRESS: "http://traefik-staging-dask-gateway/services/dask-gateway"
 
     hub:
       resources:

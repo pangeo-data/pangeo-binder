@@ -227,7 +227,7 @@ dask-gateway:
               operator: "Equal"
               value: "worker"
               effect: "NoSchedule"
-  
+
     extraConfig:
       # Use the mapping form, to support merging multiple values.yaml
       optionHandler: |

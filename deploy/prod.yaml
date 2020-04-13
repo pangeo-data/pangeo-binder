@@ -35,13 +35,12 @@ binderhub:
 
     singleuser:
       extraEnv:
-        DASK_GATEWAY__ADDRESS: "https://hub.binder.pangeo.io/services/dask-gateway/"
-        DASK_GATEWAY__PROXY_ADDRESS: "tls://scheduler-public-prod-dask-gateway:8786" 
+        DASK_GATEWAY__ADDRESS: "http://traefik-prod-dask-gateway/services/dask-gateway"
     hub:
       services:
         dask-gateway:
           # This makes the gateway available at ${HUB_URL}/services/dask-gateway
-          url: http://web-public-prod-dask-gateway
+          url: http://traefik-prod-dask-gateway.dask-gateway
 
 kube-lego:
   nodeSelector:
