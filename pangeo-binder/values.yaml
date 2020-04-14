@@ -189,7 +189,7 @@ kube-lego:
 
 dask-gateway:
   gateway:
-    prefix: "/services/dask-gateway"
+    # prefix: "/services/dask-gateway"
     image:
       name: daskgateway/dask-gateway-server
       tag: 0.7.1
