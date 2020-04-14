@@ -35,7 +35,7 @@ binderhub:
 
     singleuser:
       extraEnv:
-        DASK_GATEWAY__ADDRESS: "http://traefik-prod-dask-gateway/services/dask-gateway"
+        DASK_GATEWAY__ADDRESS: "https://hub.binder.pangeo.io/services/dask-gateway"
     hub:
       services:
         dask-gateway:
