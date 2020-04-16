@@ -37,7 +37,9 @@ iam:
       - "arn:aws:iam::783380859522:policy/pangeo-data-s3"
 
 nodeGroups:
-  - name: core-spot
+  - name: core-spot-v2
+    # use single AZ to optimise data transfer between instances, also reconnect to existing hub pvc
+    availabilityZones: ["us-west-2c"]
     minSize: 1
     maxSize: 2
     desiredCapacity: 1

@@ -11,6 +11,10 @@ binderhub:
       use_registry: true
   nodeSelector:
     hub.jupyter.org/node-purpose: core
+  resources:
+    requests:
+      cpu: 0.05
+      memory: 100Mi
 
   ingress:
     enabled: true
@@ -33,7 +37,7 @@ binderhub:
     hostLibDir: /var/lib/dind/stage
     hostSocketDir: /var/run/dind/stage
 
-  jupyterhub:    
+  jupyterhub:
     proxy:
       nodeSelector:
         hub.jupyter.org/node-purpose: core
@@ -41,12 +45,12 @@ binderhub:
         resources:
           requests:
             memory: 100Mi
-            cpu: "0.1"
+            cpu: 0.05
       nginx:
         resources:
           requests:
             memory: 100Mi
-            cpu: "0.1"
+            cpu: 0.05
 
     ingress:
       enabled: true
@@ -71,8 +75,8 @@ binderhub:
     hub:
       resources:
         requests:
-          cpu: "0.1"
           memory: 125Mi
+          cpu: 0.05
 
       services:
         dask-gateway:

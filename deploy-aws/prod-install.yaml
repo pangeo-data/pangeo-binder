@@ -14,5 +14,5 @@ binderhub:
 
   dind:
     enabled: true
-    hostLibDir: /var/lib/dind/stage
-    hostSocketDir: /var/run/dind/stage
+    hostLibDir: /var/lib/dind/prod
+    hostSocketDir: /var/run/dind/prod

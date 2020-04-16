@@ -11,6 +11,11 @@ binderhub:
       use_registry: true
   nodeSelector:
     hub.jupyter.org/node-purpose: core
+  resources:
+    # reduced from 0.2 so that all fits on 1 core node
+    requests:
+      cpu: 0.1
+      memory: 512Mi
 
   ingress:
     enabled: true
