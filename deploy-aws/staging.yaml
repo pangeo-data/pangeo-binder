@@ -13,7 +13,7 @@ binderhub:
     hub.jupyter.org/node-purpose: core
   resources:
     requests:
-      cpu: 0.05
+      cpu: 50m
       memory: 100Mi
 
   ingress:
@@ -44,13 +44,14 @@ binderhub:
       chp:
         resources:
           requests:
+            cpu: 50m
             memory: 100Mi
-            cpu: 0.05
+
       nginx:
         resources:
           requests:
+            cpu: 50m
             memory: 100Mi
-            cpu: 0.05
 
     ingress:
       enabled: true
@@ -67,16 +68,18 @@ binderhub:
          - secretName: hub-staging-aws-uswest2-binder-pangeo-io-tls
            hosts:
             - hub.staging.aws-uswest2-binder.pangeo.io
+
     singleuser:
       serviceAccountName: pangeo
       extraEnv:
         DASK_GATEWAY__ADDRESS: "https://hub.staging.aws-uswest2-binder.pangeo.io/services/dask-gateway/"
         DASK_GATEWAY__PROXY_ADDRESS: "gateway://traefik-staging-dask-gateway.staging:80"
+
     hub:
       resources:
         requests:
-          memory: 125Mi
-          cpu: 0.05
+          cpu: 50m
+          memory: 100Mi
 
       services:
         dask-gateway:

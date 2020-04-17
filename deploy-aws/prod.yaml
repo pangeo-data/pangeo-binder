@@ -12,10 +12,9 @@ binderhub:
   nodeSelector:
     hub.jupyter.org/node-purpose: core
   resources:
-    # reduced from 0.2 so that all fits on 1 core node
     requests:
-      cpu: 0.1
-      memory: 512Mi
+      cpu: 200m
+      memory: 2Gi
 
   ingress:
     enabled: true
@@ -58,12 +57,21 @@ binderhub:
          - secretName: hub-aws-uswest2-binder-pangeo-io-tls
            hosts:
             - hub.aws-uswest2-binder.pangeo.io
+
     singleuser:
       serviceAccountName: pangeo
       extraEnv:
         DASK_GATEWAY__ADDRESS: "https://hub.aws-uswest2-binder.pangeo.io/services/dask-gateway/"
         DASK_GATEWAY__PROXY_ADDRESS: "gateway://traefik-prod-dask-gateway.prod:80"
+
     hub:
+      resources:
+        requests:
+          cpu: 200m
+          memory: 1Gi
+        limits:
+          cpu: 1250m
+          memory: 3Gi
       services:
         dask-gateway:
           # This makes the gateway available at ${HUB_URL}/services/dask-gateway

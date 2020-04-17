@@ -69,7 +69,10 @@ You should now have a functioning binderhub at https://staging.aws-uswest2-binde
 For singleuser notebook pods and dask worker pods
 see https://eksctl.io/usage/iamserviceaccounts/
 ```
-eksctl create iamserviceaccount --config-file=eksctl-config.yml --override-existing-serviceaccounts
+eksctl create iamserviceaccount --config-file=k8s-aws/eksctl-config.yml
+
+#Or:
+eksctl create iamserviceaccount --region=us-west-2 --cluster=pangeo-binder --namespace=prod --name=pangeo --attach-policy-arn=arn:aws:iam::783380859522:policy/pangeo-data-s3  --profile circleci --override-existing-serviceaccounts --approve
 ```
 
 

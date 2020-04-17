@@ -15,7 +15,7 @@ iam:
   - metadata:
       name: cluster-autoscaler
       namespace: kube-system
-      labels: 
+      labels:
         aws-usage: "cluster-ops"
         k8s-addon: cluster-autoscaler.addons.k8s.io
         k8s-app: cluster-autoscaler
@@ -41,7 +41,7 @@ nodeGroups:
     # use single AZ to optimise data transfer between instances, also reconnect to existing hub pvc
     availabilityZones: ["us-west-2c"]
     minSize: 1
-    maxSize: 2
+    maxSize: 1
     desiredCapacity: 1
     privateNetworking: true
     volumeSize: 100
@@ -51,16 +51,13 @@ nodeGroups:
       hub.jupyter.org/node-purpose: core
     instancesDistribution:
       instanceTypes:
-        - t3a.large
-        - t3.large
+        - m5.large
+        - m5a.large
       spotInstancePools: 2
       onDemandBaseCapacity: 0
       onDemandPercentageAboveBaseCapacity: 0 # all spot
     ami: auto
     amiFamily: AmazonLinux2
-    iam:
-      withAddonPolicies:
-        autoScaler: true
   - name: user-spot
     minSize: 0
     maxSize: 10
@@ -134,8 +131,8 @@ nodeGroups:
     privateNetworking: true
     instancesDistribution:
       instanceTypes:
-        - t3.large
-        - t3a.large
+        - t3.medium
+        - t3a.medium
       spotInstancePools: 2
       onDemandBaseCapacity: 0
       onDemandPercentageAboveBaseCapacity: 0

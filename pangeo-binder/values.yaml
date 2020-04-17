@@ -54,9 +54,11 @@ binderhub:
       cloudMetadata:
         enabled: true
       cpu:
+        # Don't use same units as kubernetes resources here: TraitError: The 'cpu_limit' trait of a BinderSpawner instance must be a float, but a value of '4000m' <class 'str'> was specified.
         limit: 4
         guarantee: 1
       memory:
+        # watch out for traitlets.traitlets.TraitError: 8Gi is not a valid memory specification. Must be an int or a string with suffix K, M, G, T
         limit: 8G
         guarantee: 8G
       cmd: jupyter-lab
@@ -71,10 +73,10 @@ binderhub:
     hub:
       resources:
         requests:
-          cpu: "0.25"
+          cpu: 250m
           memory: 512Mi
         limits:
-          cpu: "1.25"
+          cpu: 1250m
           memory: 1Gi
       # redirectToServer: false  # turn back on to use auth
       # allowNamedServers: true  # turn back on to use auth
@@ -101,19 +103,21 @@ binderhub:
       chp:
         resources:
           requests:
+            cpu: 250m
             memory: 256Mi
-            cpu: "0.25"
           limits:
+            cpu: 500m
             memory: 512Mi
-            cpu: "0.5"
+
       nginx:
         resources:
           requests:
+            cpu: 250m
             memory: 256Mi
-            cpu: "0.25"
           limits:
+            cpu: 1000m
             memory: 1Gi
-            cpu: 1
+
 
   initContainers:
     - name: git-clone-templates
@@ -168,10 +172,10 @@ nginx-ingress:
       proxy-body-size: 64m
     resources:
       requests:
-        cpu: 0.25
+        cpu: 250m
         memory: 240Mi
       limits:
-        cpu: 0.5
+        cpu: 500m
         memory: 240Mi
 
     service:
@@ -197,7 +201,14 @@ dask-gateway:
 
     backend:
       scheduler:
+        cores:
+          request: 0.8
+          limit: 1
+        memory:
+          request: 1G
+          limit: 2G
         extraPodConfig:
+#          name: scheduler-{JUPYTERHUB_USER}-{uuid}
           tolerations:
             - key: "k8s.dask.org/dedicated"
               operator: "Equal"
@@ -214,6 +225,7 @@ dask-gateway:
             runAsGroup: 1000
             runAsUser: 1000
         extraPodConfig:
+#          name: worker-{JUPYTERHUB_USER}-{uuid}
           serviceAccountName: pangeo
           automountServiceAccountToken: true
           securityContext:
@@ -245,7 +257,7 @@ dask-gateway:
         c.Backend.cluster_options = Options(
             Integer("worker_cores", 2, min=1, max=4, label="Worker Cores"),
             Float("worker_memory", 4, min=1, max=8, label="Worker Memory (GiB)"),
-            String("image", default="pangeo/base-notebook:2019.12.24", label="Image"),
+            String("image", default="pangeo/pangeo-notebook:latest", label="Image"),
             handler=option_handler,
         )
 
