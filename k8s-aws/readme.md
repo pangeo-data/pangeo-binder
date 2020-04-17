@@ -22,6 +22,19 @@ kubectl apply -f cluster-autoscaler.yml
 
 ##### Deploy binderhub
 ```
+#curl https://get.helm.sh/helm-v3.1.2-linux-amd64.tar.gz | tar -xzf -
+#sudo mv linux-amd64/helm /usr/local/bin
+helm version #>3
+helm repo add pangeo https://pangeo-data.github.io/helm-chart/
+helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
+helm repo add dask-gateway https://dask.org/dask-gateway-helm-repo/
+helm repo update
+cd pangeo-binder/pangeo-binder
+helm dependency update
+cd ../
+```
+
+```
 export CIRCLE_BRANCH=staging
 kubectl create namespace $CIRCLE_BRANCH
 helm upgrade --wait --install ${CIRCLE_BRANCH} pangeo-binder --namespace=${CIRCLE_BRANCH} --version=v0.2.0 -f ./deploy-aws/${CIRCLE_BRANCH}-install.yaml -f ./secrets-aws/${CIRCLE_BRANCH}-install.yaml --cleanup-on-fail
@@ -36,21 +49,30 @@ export CIRCLE_BRANCH=staging
 helm upgrade --wait --install ${CIRCLE_BRANCH} pangeo-binder --namespace=${CIRCLE_BRANCH} --version=v0.2.0 -f ./deploy-aws/${CIRCLE_BRANCH}.yaml -f ./secrets-aws/${CIRCLE_BRANCH}.yaml --cleanup-on-fail
 ```
 
+Check on deployment history
+```
+helm list -A
+helm history -n staging staging
+```
+
 
 ##### Set up HTTPS (https://binderhub.readthedocs.io/en/latest/https.html)
 NOTE: edit binderhub-issuer-staging.yaml with your email
 ```
 kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v0.11.0/cert-manager.yaml --validate=false
 # Wait about 2 minutes for 'webhook' to start running before running this command:
-kubectl apply -f binderhub-issuer-${CIRCLE_BRANCH}.yaml
+kubectl apply -f k8s-aws/binderhub-issuer-${CIRCLE_BRANCH}.yaml
 ```
 You should now have a functioning binderhub at https://staging.aws-uswest2-binder.pangeo.io !!!
 
 ##### link IAM role to pangeo service account
-For singleuser notebook pods and dask worker pods 
+For singleuser notebook pods and dask worker pods
 see https://eksctl.io/usage/iamserviceaccounts/
 ```
-eksctl create iamserviceaccount --config-file=eksctl-config.yml --override-existing-serviceaccounts
+eksctl create iamserviceaccount --config-file=k8s-aws/eksctl-config.yml
+
+#Or:
+eksctl create iamserviceaccount --region=us-west-2 --cluster=pangeo-binder --namespace=prod --name=pangeo --attach-policy-arn=arn:aws:iam::783380859522:policy/pangeo-data-s3  --profile circleci --override-existing-serviceaccounts --approve
 ```
 
 

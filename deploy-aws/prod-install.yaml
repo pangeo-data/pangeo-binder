@@ -1,0 +1,18 @@
+projectName: pangeo-binder-aws
+binderhub:
+  config:
+    BinderHub:
+      use_registry: true
+      image_prefix: pangeoaccess/binder-
+  ingress:
+   https:
+    enabled: false
+
+  jupyterhub:
+    ingress:
+      enabled: false
+
+  dind:
+    enabled: true
+    hostLibDir: /var/lib/dind/prod
+    hostSocketDir: /var/run/dind/prod
