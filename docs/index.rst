@@ -66,7 +66,7 @@ brings in `several dependencies`_ including dask-gateway and dask-labextension.
 
 The version of dask-gateway pre-configured on the Binder must
 match the dask-gateway in the ``environment.yml``. That's currently
-``dask-gateway==0.6.1``.
+``dask-gateway==0.7.1``.
 
 With Dask Gateway installed, your notebooks can create clusters:
 

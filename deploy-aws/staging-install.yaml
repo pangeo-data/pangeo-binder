@@ -1,0 +1,18 @@
+projectName: pangeo-binder-aws-staging
+binderhub:
+  config:
+    BinderHub:
+      use_registry: true
+      image_prefix: pangeoaccess/binder-staging-
+  ingress:
+   https:
+    enabled: false
+
+  jupyterhub:
+    ingress:
+      enabled: false
+
+  dind:
+    enabled: true
+    hostLibDir: /var/lib/dind/stage
+    hostSocketDir: /var/run/dind/stage
