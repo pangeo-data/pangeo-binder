@@ -107,3 +107,26 @@ Other cheatsheet commands:
 ```
 eksctl delete iamserviceaccount --cluster pangeo-binder --name pangeo --namespace staging
 ```
+
+
+## Update Cluster (K8s version and nodegroups)
+https://eksctl.io/usage/cluster-upgrade/
+
+last did this 2/3/2021 with eksctl 0.37.0
+```
+eksctl upgrade cluster --name=pangeo-binder --approve
+eksctl utils update-kube-proxy --profile circleci --name pangeo-binder --region us-west-2 --approve
+eksctl utils update-aws-node --profile circleci --name pangeo-binder --region us-west-2 --approve
+eksctl utils update-coredns --profile circleci --name pangeo-binder --region us-west-2 --approve
+```
+
+create new nodegroups
+```
+eksctl create nodegroup --profile circleci --config-file=eksctl-config.yml
+```
+
+bump autoscaler version (1.16.7)
+https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler#releases
+```
+kubectl apply -f cluster-autoscaler.yml
+```
