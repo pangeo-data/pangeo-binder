@@ -7,10 +7,20 @@ binderhub:
   ingress:
    https:
     enabled: false
+  resources:
+    requests:
+      cpu: 50m
+      memory: 100Mi
 
   jupyterhub:
     ingress:
       enabled: false
+    hub:
+      resources:
+        requests:
+          cpu: 50m
+          memory: 100Mi
+
 
   dind:
     enabled: true

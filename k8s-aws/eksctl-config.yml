@@ -37,7 +37,7 @@ iam:
       - "arn:aws:iam::783380859522:policy/pangeo-data-s3"
 
 nodeGroups:
-  - name: core-spot-v2
+  - name: core-spot-xl
     # use single AZ to optimise data transfer between instances, also reconnect to existing hub pvc
     availabilityZones: ["us-west-2c"]
     minSize: 1
@@ -51,8 +51,13 @@ nodeGroups:
       hub.jupyter.org/node-purpose: core
     instancesDistribution:
       instanceTypes:
-        - m5.large
-        - m5a.large
+# Max of 30 pods per instance for c5.large, m5.large not ideal (34+ w/ prod and staging binderhubs and dask-gateway)
+# requests<2vCPU 6Gb RAM currently
+#        - m5.large
+#        - m5a.large
+# Max 60 pods for t3.xlarge, 4 vCPU, 16Gb RAM
+        - t3.xlarge
+        - t3a.xlarge
       spotInstancePools: 2
       onDemandBaseCapacity: 0
       onDemandPercentageAboveBaseCapacity: 0 # all spot
