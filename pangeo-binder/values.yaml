@@ -65,6 +65,7 @@ binderhub:
       extraEnv:
         DASK_GATEWAY__AUTH__TYPE: "jupyterhub"
         DASK_GATEWAY__CLUSTER__OPTIONS__IMAGE: '{JUPYTER_IMAGE_SPEC}'
+        DASK_GATEWAY__CLUSTER__OPTIONS__USERNAME: '{JUPYTERHUB_USER}'
 
       # to make notebook servers aware of hub
       # cmd: jupyterhub-singleuser  # turn back on to use auth
@@ -248,18 +249,28 @@ dask-gateway:
         def option_handler(options):
             if ":" not in options.image:
                 raise ValueError("When specifying an image you must also provide a tag")
+
+            extra_labels = {
+                "jupyterhub/username": options.username
+            }
+
             return {
                 "worker_cores_limit": options.worker_cores,
                 "worker_cores": min(options.worker_cores / 2, 1),
                 "worker_memory": "%fG" % options.worker_memory,
                 "image": options.image,
+                "scheduler_extra_pod_labels": extra_labels,
+                "worker_extra_pod_labels": extra_labels,
             }
+
         c.Backend.cluster_options = Options(
             Integer("worker_cores", 2, min=1, max=4, label="Worker Cores"),
             Float("worker_memory", 4, min=1, max=8, label="Worker Memory (GiB)"),
             String("image", default="pangeo/pangeo-notebook:latest", label="Image"),
+            String("username", default="", label="Username"),
             handler=option_handler,
         )
+
 
       # TODO: replace with some k8s things
       # resource quota. per namespace.
