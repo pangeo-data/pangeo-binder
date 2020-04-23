@@ -245,22 +245,29 @@ dask-gateway:
       optionHandler: |
         from dask_gateway_server.options import Options, Integer, Float, String
 
-        def option_handler(options):
-            if ":" not in options.image:
-                raise ValueError("When specifying an image you must also provide a tag")
-            return {
-                "worker_cores_limit": options.worker_cores,
-                "worker_cores": min(options.worker_cores / 2, 1),
-                "worker_memory": "%fG" % options.worker_memory,
-                "image": options.image,
-            }
-        c.Backend.cluster_options = Options(
-            Integer("worker_cores", 2, min=1, max=4, label="Worker Cores"),
-            Float("worker_memory", 4, min=1, max=8, label="Worker Memory (GiB)"),
-            String("image", default="pangeo/pangeo-notebook:latest", label="Image"),
-            handler=option_handler,
-        )
-
+        def cluster_options(user):
+           def option_handler(options):
+               if ":" not in options.image:
+                   raise ValueError("When specifying an image you must also provide a tag")
+               extra_labels = {
+                   "jupyterhub/username": user.name
+               }
+               return {
+                   "worker_cores_limit": options.worker_cores,
+                   "worker_cores": min(options.worker_cores / 2, 1),
+                   "worker_memory": "%fG" % options.worker_memory,
+                   "image": options.image,
+                   "scheduler_extra_pod_labels": extra_labels,
+                   "worker_extra_pod_labels": extra_labels,
+               }
+           return Options(
+               Integer("worker_cores", 2, min=1, max=4, label="Worker Cores"),
+               Float("worker_memory", 4, min=1, max=8, label="Worker Memory (GiB)"),
+               String("image", default="pangeo/pangeo-notebook:latest", label="Image"),
+               handler=option_handler,
+           )
+        
+        c.Backend.cluster_options = cluster_options
       # TODO: replace with some k8s things
       # resource quota. per namespace.
       # on binder, so might need some thought.
