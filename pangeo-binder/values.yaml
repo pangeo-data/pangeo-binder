@@ -242,6 +242,10 @@ dask-gateway:
 
     extraConfig:
       # Use the mapping form, to support merging multiple values.yaml
+      idle: |
+        # timeout after 30 minutes of inactivity
+        c.KubeClusterConfig.idle_timeout = 108000
+
       optionHandler: |
         from dask_gateway_server.options import Options, Integer, Float, String
 
