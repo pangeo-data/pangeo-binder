@@ -34,6 +34,7 @@ helm dependency update
 cd ../
 ```
 
+Initial install takes ~ 3mins for everything to be created
 ```
 export CIRCLE_BRANCH=staging
 kubectl create namespace $CIRCLE_BRANCH
