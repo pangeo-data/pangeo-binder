@@ -253,16 +253,16 @@ dask-gateway:
            def option_handler(options):
                if ":" not in options.image:
                    raise ValueError("When specifying an image you must also provide a tag")
-               extra_labels = {
-                   "jupyterhub/username": user.name
+               extra_annotations = {
+                   "hub.jupyter.org/username": user.name
                }
                return {
                    "worker_cores_limit": options.worker_cores,
                    "worker_cores": min(options.worker_cores / 2, 1),
                    "worker_memory": "%fG" % options.worker_memory,
                    "image": options.image,
-                   "scheduler_extra_pod_labels": extra_labels,
-                   "worker_extra_pod_labels": extra_labels,
+                   "scheduler_extra_pod_annotations": extra_annotations,
+                   "worker_extra_pod_annotations": extra_annotations,
                }
            return Options(
                Integer("worker_cores", 2, min=1, max=4, label="Worker Cores"),
