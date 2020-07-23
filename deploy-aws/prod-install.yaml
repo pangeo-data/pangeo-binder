@@ -16,3 +16,9 @@ binderhub:
     enabled: true
     hostLibDir: /var/lib/dind/prod
     hostSocketDir: /var/run/dind/prod
+
+prometheus:
+  server:
+    ingress:
+      hosts:
+        - prometheus.aws-uswest2-binder.pangeo.io
