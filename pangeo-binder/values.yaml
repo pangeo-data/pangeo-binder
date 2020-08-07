@@ -313,6 +313,11 @@ prometheus-operator:
         memory: 1Gi
 
   grafana:
+    service:
+      type: LoadBalancer
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/metrics"
     resources:
       limits:
         cpu: 500m

@@ -79,11 +79,6 @@ binderhub:
 
 prometheus-operator:
   grafana:
-    service:
-      type: LoadBalancer
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/path: "/metrics"
     ingress:
       enabled: true
       hosts:
