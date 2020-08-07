@@ -77,33 +77,22 @@ binderhub:
           # This makes the gateway available at ${HUB_URL}/services/dask-gateway
           url: http://traefik-prod-dask-gateway.prod
 
-grafana:
-  ingress:
-    hosts:
-      - grafana.aws-uswest2-binder.pangeo.io
-    tls:
-      - hosts:
-          - grafana.aws-uswest2-binder.pangeo.io
-        secretName: kubelego-tls-grafana
-  datasources:
-    datasources.yaml:
-      apiVersion: 1
-      datasources:
-        - name: prometheus
-          orgId: 1
-          type: prometheus
-          url: https://prometheus.aws-uswest2-binder.pangeo.io
-          access: direct
-          isDefault: true
-          editable: false
-
-prometheus:
-  server:
+prometheus-operator:
+  grafana:
+    service:
+      type: LoadBalancer
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/metrics"
     ingress:
+      enabled: true
       hosts:
-        - prometheus.aws-uswest2-binder.pangeo.io
-      tls: 
-        - hosts:
-            - prometheus.aws-uswest2-binder.pangeo.io
-          secretName: kubelego-tls-prometheus
-
+        - grafana.aws-uswest2-binder.pangeo.io
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        kubernetes.io/tls-acme: "true"
+        cert-manager.io/issuer: letsencrypt-production
+      tls:
+        - secretName: grafana.aws-uswest2-binder.pangeo.io-tls
+          hosts:
+            - grafana.aws-uswest2-binder.pangeo.io
