@@ -281,78 +281,65 @@ dask-gateway:
       #   c.UserLimits.max_memory = "400 G"
       #   c.UserLimits.max_clusters = 1
 
-prometheus:
-  alertmanager:
-    enabled: false
-  nodeExporter:
-    enabled: true
-    tolerations:
-      - operator: "Exists"
-    updateStrategy:
-      type: RollingUpdate
-  pushgateway:
-    enabled: false
-  rbac:
-    create: true
-  server:
-    ingress:
-      enabled: true
-      annotations:
-        kubernetes.io/ingress.class: nginx
-        kubernetes.io/tls-acme: 'true'
-    persistentVolume:
-      enabled: true
-    retention: 30d
-  resources:
-    limits:
-      cpu: 500m
-      memory: 1Gi
-    requests:
-      cpu: 100m
-      memory: 1Gi
-
-grafana:
-  ingress:
-    enabled: true
-    annotations:
-      kubernetes.io/ingress.class: nginx
-      kubernetes.io/tls-acme: 'true'
-    persistence:
+prometheus-operator:
+  prometheus:
+    alertmanager:
       enabled: false
-
-  grafana.ini:
-    auth.anonymous:
+    nodeExporter:
       enabled: true
-      org_name: Main Org.
-      org_role: Viewer
-    auth.basic:
+      tolerations:
+        - operator: "Exists"
+      updateStrategy:
+        type: RollingUpdate
+    pushgateway:
+      enabled: false
+    rbac:
+      create: true
+    server:
       enabled: true
-    smtp:
-      enabled: true
+      retention: 30d
+      statefulSet: 
+        enabled: true
+      persistentVolume:
+        enabled: true
+      ingress:
+        enabled: false
+    resources:
+      limits:
+        cpu: 500m
+        memory: 1Gi
+      requests:
+        cpu: 100m
+        memory: 1Gi
 
-  resources:
-    limits:
-      cpu: 500m
-      memory: 1Gi
-    requests:
-      cpu: 100m
-      memory: 256Mi
-
-  dashboardProviders:
-    dashboardproviders.yaml:
-      apiVersion: 1
-      providers:
-        - name: 'default'
-          orgId: 1
-          folder: ''
-          type: file
-          disableDeletion: true
-          editable: true
-          options:
-            path: /var/lib/grafana/dashboards/default
-  dashboards:
-    default:
-      cluster-monitoring-for-kubernetes:
-        gnetId: 10000
-        revision: 1
-        datasource: prometheus
+  grafana:
+    resources:
+      limits:
+        cpu: 500m
+        memory: 1Gi
+      requests:
+        cpu: 100m
+        memory: 256Mi
+    deploymentStrategy:
+      type: Recreate
+    persistence:
+      type: pvc
+      enabled: false
+    dashboardProviders:
+      dashboardproviders.yaml:
+        apiVersion: 1
+        providers:
+          - name: 'default'
+            orgId: 1
+            folder: ''
+            type: file
+            disableDeletion: true
+            editable: true
+            options:
+              path: /var/lib/grafana/dashboards/default
+    dashboards:
+      default:
+        cluster-monitoring-for-kubernetes:
+          gnetId: 10000
+          revision: 1
+          datasource: Prometheus
