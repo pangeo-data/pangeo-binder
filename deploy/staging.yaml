@@ -74,12 +74,12 @@ prometheus-operator:
     ingress:
       enabled: true
       hosts:
-        - grafana.staging.test-binder.hackweek.io
+        - grafana.staging.binder.pangeo.io
       annotations:
         kubernetes.io/ingress.class: nginx
         kubernetes.io/tls-acme: "true"
         cert-manager.io/issuer: letsencrypt-production
       tls:
-        - secretName: grafana.staging.test-binder.hackweek.io-tls
+        - secretName: grafana.staging.binder.binder.io-tls
           hosts:
-            - grafana.staging.test-binder.hackweek.io
+            - grafana.staging.binder.binder.io
