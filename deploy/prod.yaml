@@ -53,26 +53,6 @@ nginx-ingress:
     service:
       loadBalancerIP: 35.226.186.40
 
-grafana:
-  ingress:
-    hosts:
-      - grafana.binder.pangeo.io
-    tls:
-      - hosts:
-          - grafana.binder.pangeo.io
-        secretName: kubelego-tls-grafana
-  datasources:
-    datasources.yaml:
-      apiVersion: 1
-      datasources:
-        - name: prometheus
-          orgId: 1
-          type: prometheus
-          url: https://prometheus.binder.pangeo.io
-          access: direct
-          isDefault: true
-          editable: false
-
 prometheus-operator:
   grafana:
     ingress:
