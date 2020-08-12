@@ -44,7 +44,11 @@ NOTE: confirm non-https deployment working by `kubectl get pods -A` and going to
 
 
 ##### Upgrade binderhub w/ manually edited https settings
+
 NOTE: add loadbalanerIPs to secrets-aws/staging.yaml, update DNS settings for domain name
+
+Will also need to change various `hosts` in `deploy-aws/staging.yaml` or `deploy-aws/prod.yaml` as well as the same file in `secrets-aws/` if you are not hosting the binderhub through `staging.aws-uswest2-binder.pangeo.io`.
+
 ```
 export CIRCLE_BRANCH=staging
 helm upgrade --wait --install ${CIRCLE_BRANCH} pangeo-binder --namespace=${CIRCLE_BRANCH} --version=v0.2.0 -f ./deploy-aws/${CIRCLE_BRANCH}.yaml -f ./secrets-aws/${CIRCLE_BRANCH}.yaml --cleanup-on-fail
@@ -81,12 +85,20 @@ eksctl create iamserviceaccount --region=us-west-2 --cluster=pangeo-binder --nam
 you can get rid of resources created with `kubectl apply` with `kubectl delete`:
 ```
 kubectl delete -f https://github.com/jetstack/cert-manager/releases/download/v0.11.0/cert-manager.yaml
+kubectl delete -f k8s-aws/binderhub-issuer-${CIRCLE_BRANCH}.yaml
 ```
 
-Or tear everything down with
+Tear the binderhub down with
 ```
 helm delete staging -n staging
 ```
+
+Remove `prometheus-operator` custom resource definitions (CRDs)
+```
+kubectl delete crd --all
+```
+
+Remove DNS settings and records.
 
 Other cheatsheet commands:
 ```
