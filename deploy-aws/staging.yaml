@@ -87,7 +87,23 @@ binderhub:
           url: http://traefik-staging-dask-gateway.staging
 
 prometheus-operator:
+  prometheus:
+    resources:
+      limits:
+        cpu: 500m
+        memory: 1Gi
+      requests:
+        cpu: 0m
+        memory: 0Gi
   grafana:
+    resources:
+    resources:
+      limits:
+        cpu: 500m
+        memory: 1Gi
+      requests:
+        cpu: 0m
+        memory: 0Gi
     ingress:
       enabled: true
       hosts:
