@@ -13,8 +13,20 @@ binderhub:
     hub.jupyter.org/node-purpose: core
 
   ingress:
+    enabled: true
     hosts:
       - staging.binder.pangeo.io
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
+      cert-manager.io/issuer: letsencrypt-production
+      https:
+        enabled: true
+        type: nginx
+    tls:
+      - secretName: staging-binder-pangeo-io-tls
+        hosts:
+          - staging.binder.pangeo.io
 
   dind:
     hostLibDir: /var/lib/dind/staging
@@ -25,12 +37,21 @@ binderhub:
       nodeSelector:
         hub.jupyter.org/node-purpose: core
     ingress:
+      enabled: true
       hosts:
         - hub.staging.binder.pangeo.io
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        kubernetes.io/tls-acme: "true"
+        cert-manager.io/issuer: letsencrypt-production
+        https:
+          enabled: true
+          type: nginx
       tls:
-        - secretName: kubelego-tls-jupyterhub-staging
-          hosts:
+         - secretName: hub-staging-binder-pangeo-io-tls
+           hosts:
             - hub.staging.binder.pangeo.io
+
     scheduling:
       userScheduler:
         enabled: false
@@ -60,9 +81,6 @@ binderhub:
           requests:
             memory: 100Mi
             cpu: "0.1"
-kube-lego:
-  nodeSelector:
-    hub.jupyter.org/node-purpose: core
 
 nginx-ingress:
   controller:
@@ -99,3 +117,19 @@ prometheus-operator:
         - secretName: grafana.staging.binder.binder.io-tls
           hosts:
             - grafana.staging.binder.binder.io
+
+ingress:
+  enabled: true
+  hosts:
+     - staging.binder.pangeo.io
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/issuer: letsencrypt-production
+    https:
+      enabled: true
+      type: nginx
+  tls:
+    - secretName: staging-binder-pangeo-io-tls
+      hosts:
+       - staging.binder.pangeo.io
