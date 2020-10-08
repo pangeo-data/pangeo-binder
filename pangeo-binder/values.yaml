@@ -187,7 +187,7 @@ dask-gateway:
     prefix: "/services/dask-gateway"
     image:
       name: daskgateway/dask-gateway-server
-      tag: 0.7.1
+      tag: 0.8.0
       pullPolicy: IfNotPresent
 
     backend:
