@@ -4,7 +4,7 @@ binderhub:
 
   config:
     BinderHub:
-      build_image: jupyter/repo2docker:0.11.0-20.g070e4a9
+      build_image: jupyter/repo2docker:0.11.0-169.gae6c2dc
       use_registry: true
       # use_named_servers: true  # turn back on to use auth
       # auth_enabled: true  # turn back on to use auth
@@ -20,7 +20,7 @@ binderhub:
       kubernetes.io/ingress.class: nginx
     https:
       enabled: true
-      type: kube-lego
+      type: nginx
   jupyterhub:
     ingress:
         enabled: true
@@ -182,21 +182,12 @@ nginx-ingress:
       # Preserve client IPs
       externalTrafficPolicy: Local
 
-kube-lego:
-  config:
-    LEGO_EMAIL: jhamman@ucar.edu
-    LEGO_URL: https://acme-v01.api.letsencrypt.org/directory
-  rbac:
-    create: true
-  image:
-    tag: 0.1.7
-
 dask-gateway:
   gateway:
     prefix: "/services/dask-gateway"
     image:
       name: daskgateway/dask-gateway-server
-      tag: 0.7.1
+      tag: 0.8.0
       pullPolicy: IfNotPresent
 
     backend:
@@ -280,3 +271,71 @@ dask-gateway:
       #   c.UserLimits.max_cores = 100
       #   c.UserLimits.max_memory = "400 G"
       #   c.UserLimits.max_clusters = 1
+
+prometheus-operator:
+  prometheus:
+    alertmanager:
+      enabled: false
+    nodeExporter:
+      enabled: true
+      tolerations:
+        - operator: "Exists"
+      updateStrategy:
+        type: RollingUpdate
+    pushgateway:
+      enabled: false
+    rbac:
+      create: true
+    server:
+      enabled: true
+      retention: 30d
+      statefulSet: 
+        enabled: true
+      persistentVolume:
+        enabled: true
+      ingress:
+        enabled: false
+    resources:
+      limits:
+        cpu: 500m
+        memory: 1Gi
+      requests:
+        cpu: 100m
+        memory: 1Gi
+
+  grafana:
+    service:
+      type: LoadBalancer
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/metrics"
+    resources:
+      limits:
+        cpu: 500m
+        memory: 1Gi
+      requests:
+        cpu: 100m
+        memory: 256Mi
+    deploymentStrategy:
+      type: Recreate
+    persistence:
+      type: pvc
+      enabled: false
+    dashboardProviders:
+      dashboardproviders.yaml:
+        apiVersion: 1
+        providers:
+          - name: 'default'
+            orgId: 1
+            folder: ''
+            type: file
+            disableDeletion: true
+            editable: true
+            options:
+              path: /var/lib/grafana/dashboards/default
+    dashboards:
+      default:
+        cluster-monitoring-for-kubernetes:
+          gnetId: 10000
+          revision: 1
+          datasource: Prometheus

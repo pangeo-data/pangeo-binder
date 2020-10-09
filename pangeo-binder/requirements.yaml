@@ -1,17 +1,14 @@
 # requirements.yaml
 dependencies:
 - name: binderhub
-  version: 0.2.0-n132.h1a8ce62
+  version: 0.2.0-n219.hbc17443
   repository: https://jupyterhub.github.io/helm-chart/
   import-values:
     - child: rbac
       parent: rbac
-- name: kube-lego
-  version: 0.4.2
-  repository: https://kubernetes-charts.storage.googleapis.com
 - name: nginx-ingress
   version: 1.34.2
   repository: https://kubernetes-charts.storage.googleapis.com
 - name: dask-gateway
-  version: "0.7.1"
+  version: "0.8.0"
   repository: 'https://dask.org/dask-gateway-helm-repo/'
