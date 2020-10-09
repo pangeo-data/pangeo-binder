@@ -24,8 +24,33 @@ For more information on the Pangeo project, check out the `online documentation`
 Using Pangeo's Binder
 ---------------------
 
-Preparing a repository for use with a BinderHub is quite simple. The best place
-to start is the `BinderHub documentation`_. The sections below outline some
+Preparing a repository for use with a BinderHub is quite simple. There are two
+components
+
+1. The environment specification, typically a directory called ``binder`` with
+   some configuration files (a ``Dockerfile``, a conda ``environment.yaml``, ...)
+2. The content: notebooks, scripts, images, etc. that are present when the
+   binder launches.
+
+Users with fairly standard environment needs can focus soley on the content by using
+pangeo's `"default binder" <https://github.com/pangeo-gallery/default-binder>`_ repository. This is a standard environment with the most commonly-used geoscience packages.
+
+To use this environment with
+your content, you need to craft a URL. https://jupyterhub.github.io/nbgitpuller/link.html provides a tool for creating these URLs (select the "binder" tab). For example, to use the content from https://github.com/pangeo-data/pangeo-tutorial-gallery with the default-binder environment on pangeo's binder:
+
+* BinderHub URL: https://binder.pangeo.io
+* Environment URL: https://github.com/pangeo-gallery/default-binder
+* Content URL: https://github.com/pangeo-data/pangeo-tutorial-gallery
+
+.. image:: _static/nbgitpuller.png
+
+Which generates the final URL: https://binder.pangeo.io/v2/gh/pangeo-gallery/default-binder/master?urlpath=git-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252Fpangeo-data%252Fpangeo-tutorial-gallery%26urlpath%3Dlab%252Ftree%252Fpangeo-tutorial-gallery%252FREADME.md%26branch%3Dmaster
+
+See https://github.com/pangeo-gallery/default-binder for more.
+
+If pangeo's default image isn't sufficient, see below for building a custom
+image. For more information on building custom binder images, check out the 
+`BinderHub documentation`_. The sections below outline some
 common configurations used on Pangeo's BinderHub deployment. Specifically,
 we'll provide examples of the ``.dask/config.yaml`` configuration file and the
 ``binder/start`` script.
@@ -66,7 +91,7 @@ brings in `several dependencies`_ including dask-gateway and dask-labextension.
 
 The version of dask-gateway pre-configured on the Binder must
 match the dask-gateway in the ``environment.yml``. That's currently
-``dask-gateway==0.7.1``.
+``dask-gateway=>0.8.0``.
 
 With Dask Gateway installed, your notebooks can create clusters:
 
