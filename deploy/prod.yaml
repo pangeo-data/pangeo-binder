@@ -14,9 +14,21 @@ binderhub:
     hub.jupyter.org/node-purpose: core
 
   ingress:
+    enabled: true
     hosts:
       - binder.pangeo.io
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
+      cert-manager.io/issuer: letsencrypt-production
+      https:
+        enabled: true
+        type: nginx
 
+    tls:
+      - secretName: prod-binder-pangeo-io-tls
+        hosts:
+          - binder.pangeo.io
   dind:
     hostLibDir: /var/lib/dind/prod
     hostSocketDir: /var/run/dind/prod
@@ -26,10 +38,18 @@ binderhub:
       nodeSelector:
         hub.jupyter.org/node-purpose: core
     ingress:
+      enabled: true
       hosts:
         - hub.binder.pangeo.io
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        kubernetes.io/tls-acme: "true"
+        cert-manager.io/issuer: letsencrypt-production
+        https:
+          enabled: true
+          type: nginx
       tls:
-        - secretName: kubelego-tls-jupyterhub-prod
+        - secretName: hub-binder-pangeo-io-tls
           hosts:
             - hub.binder.pangeo.io
 
@@ -44,9 +64,22 @@ binderhub:
           # This makes the gateway available at ${HUB_URL}/services/dask-gateway
           url: http://traefik-prod-dask-gateway.prod
 
-kube-lego:
-  nodeSelector:
-    hub.jupyter.org/node-purpose: core
+ingress:
+  enabled: true
+  hosts:
+     - binder.pangeo.io
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/issuer: letsencrypt-production
+    https:
+      enabled: true
+      type: nginx
+  tls:
+    - secretName: prod-binder-pangeo-io-tls
+      hosts:
+       - binder.pangeo.io
+
 
 nginx-ingress:
   controller:
