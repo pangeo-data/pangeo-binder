@@ -20,7 +20,7 @@ binderhub:
       kubernetes.io/ingress.class: nginx
     https:
       enabled: true
-      type: kube-lego
+      type: nginx
   jupyterhub:
     ingress:
         enabled: true
@@ -182,21 +182,12 @@ nginx-ingress:
       # Preserve client IPs
       externalTrafficPolicy: Local
 
-kube-lego:
-  config:
-    LEGO_EMAIL: jhamman@ucar.edu
-    LEGO_URL: https://acme-v01.api.letsencrypt.org/directory
-  rbac:
-    create: true
-  image:
-    tag: 0.1.7
-
 dask-gateway:
   gateway:
     prefix: "/services/dask-gateway"
     image:
       name: daskgateway/dask-gateway-server
-      tag: 0.7.1
+      tag: 0.8.0
       pullPolicy: IfNotPresent
 
     backend:
