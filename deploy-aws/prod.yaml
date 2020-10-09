@@ -77,7 +77,7 @@ binderhub:
           # This makes the gateway available at ${HUB_URL}/services/dask-gateway
           url: http://traefik-prod-dask-gateway.prod
 
-prometheus-operator:
+kube-prometheus-stack:
   grafana:
     ingress:
       enabled: true

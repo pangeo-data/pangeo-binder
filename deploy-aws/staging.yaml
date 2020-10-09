@@ -86,7 +86,7 @@ binderhub:
           # This makes the gateway available at ${HUB_URL}/services/dask-gateway
           url: http://traefik-staging-dask-gateway.staging
 
-prometheus-operator:
+kube-prometheus-stack:
   prometheus:
     resources:
       limits:
