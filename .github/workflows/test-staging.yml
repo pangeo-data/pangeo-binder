@@ -3,7 +3,7 @@ name: Test Staging
 on:
   pull_request_target:
     branches:
-      - master
+      - staging
 
 jobs:
   test-staging:
