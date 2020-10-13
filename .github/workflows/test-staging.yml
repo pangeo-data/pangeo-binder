@@ -43,4 +43,4 @@ jobs:
       - name: Run staging
         if: contains( env.COMMIT_MESSAGE , 'test-staging' )
         run: |
-          python ../.github/workflows/scripts/run_staging.py
+          python .github/workflows/scripts/run_staging.py
