@@ -16,8 +16,8 @@ NB_TIMEOUT = 1200  # This is ~2X the longest cell (storage benchmarks)
 
 
 async def main():
-    files = list(pathlib.Path(".").glob("**/binder-gallery.yaml"))
-    root = pathlib.Path(".").absolute()
+    files = list(pathlib.Path("pangeo-gallery").glob("**/binder-gallery.yaml"))
+    root = pathlib.Path("pangeo-gallery").absolute()
 
     configs = {}
     for file in files:
