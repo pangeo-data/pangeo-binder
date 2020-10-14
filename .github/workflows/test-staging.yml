@@ -1,0 +1,46 @@
+# Runs all galleries against staging
+name: Test Staging
+on:
+  pull_request_target:
+    branches:
+      - staging
+
+jobs:
+  test-staging:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout pangeo-binder
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      - name: get commit message
+        run: |
+           echo 'COMMIT_MESSAGE<<EOF' >> $GITHUB_ENV
+           echo "$(git log --format=%B -n 1 ${{ github.event.after }})" >> $GITHUB_ENV
+           echo 'EOF' >> $GITHUB_ENV
+
+      - name: Checkout pangeo-gallery
+        if: contains( env.COMMIT_MESSAGE , 'test-staging' )
+        uses: actions/checkout@v2
+        with:
+          repository: pangeo-gallery/pangeo-gallery
+          path: pangeo-gallery
+          submodules: recursive
+
+      - uses: actions/setup-python@v1
+        if: contains( env.COMMIT_MESSAGE , 'test-staging' )
+        with:
+          python-version: '3.8'
+          architecture: 'x64'
+
+      - name: Install Dependencies
+        if: contains( env.COMMIT_MESSAGE , 'test-staging' )
+        run: |
+          pip install -r pangeo-gallery/requirements.txt
+
+      - name: Run staging
+        if: contains( env.COMMIT_MESSAGE , 'test-staging' )
+        run: |
+          python .github/workflows/scripts/run_staging.py
