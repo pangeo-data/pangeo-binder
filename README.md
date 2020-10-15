@@ -47,3 +47,26 @@ The setup and configuration of Pangeo's BinderHub largely follows the [Zero to B
 - Pangeo-Binder Issue Tracker: https://github.com/pangeo-data/pangeo-binder/issues
 - Zero to BinderHub Documentation: https://binderhub.readthedocs.io/en/latest/
 - MyBinder Documentation: https://mybinder.readthedocs.io/en/latest/
+
+
+## Testing Binder Updates
+
+We deploy `staging` and `prod` BinderHubs. Before re-deploying `prod` by merging
+`staging` into `prod`, it's a good idea to test the deployment on some real-world
+examples.
+
+Create an empty pull request against the `staging` branch with the text
+`test-staging` in the commit message.
+
+.. code-block:: console
+
+   $ git checkout -b test-staging
+   $ git commit --allow-empty -m 'test staging'
+   $ git push -u origin
+
+Once that pull request is opened, the script in ``.github/workflows/scripts/run_staging.py``
+is run. That will run the latest versions of the notebooks in http://gallery.pangeo.io/
+against
+
+1. The staging binder deployment (e.g. https://staging.binder.pangeo.io/)
+2. The staging Docker image (e.g. https://github.com/pangeo-gallery/default-binder/tree/staging)
