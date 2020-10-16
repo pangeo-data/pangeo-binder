@@ -36,11 +36,13 @@ Users with fairly standard environment needs can focus soley on the content by u
 pangeo's `"default binder" <https://github.com/pangeo-gallery/default-binder>`_ repository. This is a standard environment with the most commonly-used geoscience packages.
 
 To use this environment with
-your content, you need to craft a URL. https://jupyterhub.github.io/nbgitpuller/link.html provides a tool for creating these URLs (select the "binder" tab). For example, to use the content from https://github.com/pangeo-data/pangeo-tutorial-gallery with the default-binder environment on pangeo's binder:
+your content, you need to craft a URL. https://jupyterhub.github.io/nbgitpuller/link?tab=binder&repo=https://github.com/pangeo-gallery/default-binder provides a tool for creating these URLs (select the "binder" tab). For example, to use the content from https://github.com/pangeo-data/pangeo-tutorial-gallery with the default-binder environment on pangeo's binder:
 
 * BinderHub URL: https://binder.pangeo.io
 * Environment URL: https://github.com/pangeo-gallery/default-binder
 * Content URL: https://github.com/pangeo-data/pangeo-tutorial-gallery
+
+You might want to select a different User Interface, like JupyterLab.
 
 .. image:: _static/nbgitpuller.png
 
