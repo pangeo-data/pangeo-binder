@@ -45,22 +45,15 @@ async def main():
         print(f"Staring BinderUser for {binder_url}, {binder_repo}, {binder_url}")
         async with BinderUser(binder_url, binder_repo, binder_ref) as jovyan:
             for file, config in group:
-                try:
-                    os.chdir(file.parent.absolute())
-                    notebooks = [str(x) for x in (pathlib.Path(".").glob("*.ipynb"))]
-
-                    print(
-                        f"running {file} on {binder_url} with {binder_repo}@{binder_ref}"
-                    )
-                    try:
-                        await jovyan.run(
-                            notebooks, download=False, nb_timeout=NB_TIMEOUT
-                        )
-                    except Exception as e:
-                        exceptions[file] = e
-                        print("exception in", file)
-                finally:
-                    os.chdir(root)
+                os.chdir(file.parent.absolute())
+                notebooks = [str(x) for x in (pathlib.Path(".").glob("*.ipynb"))]
+                print(f"running {file} on {binder_url} with {binder_repo}@{binder_ref}")
+                errors = await jovyan.run(
+                    notebooks, download=False, nb_timeout=NB_TIMEOUT
+                )
+                os.chdir(root)
+                if errors:
+                    exceptions[str(file)] = errors
 
             await jovyan.stop_kernel()
 
