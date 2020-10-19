@@ -27,21 +27,20 @@ binderhub:
     hostLibDir: /var/lib/dind/stage
     hostSocketDir: /var/run/dind/stage
 
-kube-prometheus-stack:
-  prometheus:
-    resources:
-      limits:
-        cpu: 500m
-        memory: 1Gi
-      requests:
-        cpu: 0m
-        memory: 0Gi
-  grafana:
-    resources:
-    resources:
-      limits:
-        cpu: 500m
-        memory: 1Gi
-      requests:
-        cpu: 0m
-        memory: 0Gi
+prometheus:
+  resources:
+    limits:
+      cpu: 500m
+      memory: 1Gi
+    requests:
+      cpu: 0m
+      memory: 0Gi
+grafana:
+  resources:
+  resources:
+    limits:
+      cpu: 500m
+      memory: 1Gi
+    requests:
+      cpu: 0m
+      memory: 0Gi

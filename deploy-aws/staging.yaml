@@ -86,33 +86,29 @@ binderhub:
           # This makes the gateway available at ${HUB_URL}/services/dask-gateway
           url: http://traefik-staging-dask-gateway.staging
 
-kube-prometheus-stack:
-  prometheus:
-    resources:
-      limits:
-        cpu: 500m
-        memory: 1Gi
-      requests:
-        cpu: 0m
-        memory: 0Gi
-  grafana:
-    resources:
-    resources:
-      limits:
-        cpu: 500m
-        memory: 1Gi
-      requests:
-        cpu: 0m
-        memory: 0Gi
-    ingress:
-      enabled: true
-      hosts:
-        - grafana.staging.aws-uswest2-binder.pangeo.io
-      annotations:
-        kubernetes.io/ingress.class: nginx
-        kubernetes.io/tls-acme: "true"
-        cert-manager.io/issuer: letsencrypt-production
-      tls:
-        - secretName: grafana.staging.aws-uswest2-binder.pangeo.io-tls
-          hosts:
-            - grafana.staging.aws-uswest2-binder.pangeo.io
+prometheus:
+  resources:
+    limits:
+      cpu: 500m
+      memory: 1Gi
+    requests:
+      cpu: 0m
+      memory: 0Gi
+grafana:
+  resources:
+  resources:
+    limits:
+      cpu: 500m
+      memory: 1Gi
+    requests:
+      cpu: 0m
+      memory: 0Gi
+  ingress:
+    enabled: true
+    path: /grafana/?(.*)
+    hosts:
+      - staging.aws-uswest2-binder.pangeo.io
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      nginx.ingress.kubernetes.io/rewrite-target: /$1
+      nginx.ingress.kubernetes.io/use-regex: "true"
