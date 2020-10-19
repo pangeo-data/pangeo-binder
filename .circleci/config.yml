@@ -41,6 +41,8 @@ jobs:
             helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
             helm repo add dask-gateway https://dask.org/dask-gateway-helm-repo/
             helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+            helm repo add grafana https://grafana.github.io/helm-charts
+            helm repo add stable https://kubernetes-charts.storage.googleapis.com/
             helm repo update
 
             cd ~/repo/pangeo-binder
