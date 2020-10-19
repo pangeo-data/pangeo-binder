@@ -67,13 +67,6 @@ jobs:
           name: Deploy Google binderhub
           when: always
           command: |
-            kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/release-0.42/example/prometheus-operator-crd/monitoring.coreos.com_alertmanagers.yaml
-            kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/release-0.42/example/prometheus-operator-crd/monitoring.coreos.com_podmonitors.yaml
-            kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/release-0.42/example/prometheus-operator-crd/monitoring.coreos.com_prometheuses.yaml
-            kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/release-0.42/example/prometheus-operator-crd/monitoring.coreos.com_prometheusrules.yaml
-            kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/release-0.42/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml
-            kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/release-0.42/example/prometheus-operator-crd/monitoring.coreos.com_thanosrulers.yaml
-            kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/release-0.42/example/prometheus-operator-crd/monitoring.coreos.com_probes.yaml
             helm upgrade --wait --install \
               ${CIRCLE_BRANCH} pangeo-binder \
               --namespace=${CIRCLE_BRANCH} --version=v0.2.0 \
@@ -105,12 +98,6 @@ jobs:
           name: Deploy AWS binderhub
           when: always
           command: |
-            kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/release-0.38/example/prometheus-operator-crd/monitoring.coreos.com_alertmanagers.yaml
-            kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/release-0.38/example/prometheus-operator-crd/monitoring.coreos.com_podmonitors.yaml
-            kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/release-0.38/example/prometheus-operator-crd/monitoring.coreos.com_prometheuses.yaml
-            kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/release-0.38/example/prometheus-operator-crd/monitoring.coreos.com_prometheusrules.yaml
-            kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/release-0.38/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml
-            kubectl apply -f https://raw.githubusercontent.com/coreos/prometheus-operator/release-0.38/example/prometheus-operator-crd/monitoring.coreos.com_thanosrulers.yaml
             kubectl apply -f https://raw.githubusercontent.com/dask/dask-gateway/0.8.0/resources/helm/dask-gateway/crds/daskclusters.yaml
             kubectl apply -f https://raw.githubusercontent.com/dask/dask-gateway/0.8.0/resources/helm/dask-gateway/crds/traefik.yaml
             helm upgrade --wait --install \
