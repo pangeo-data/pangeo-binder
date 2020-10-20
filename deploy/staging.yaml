@@ -106,29 +106,10 @@ grafana:
       memory: 0Gi
   ingress:
     enabled: true
+    path: /grafana/?(.*)
     hosts:
-      - grafana.staging.binder.pangeo.io
+      - staging.binder.pangeo.io
     annotations:
       kubernetes.io/ingress.class: nginx
-      kubernetes.io/tls-acme: "true"
-      cert-manager.io/issuer: letsencrypt-production
-    tls:
-      - secretName: grafana.staging.binder.binder.io-tls
-        hosts:
-          - grafana.staging.binder.binder.io
-
-ingress:
-  enabled: true
-  hosts:
-     - staging.binder.pangeo.io
-  annotations:
-    kubernetes.io/ingress.class: nginx
-    kubernetes.io/tls-acme: "true"
-    cert-manager.io/issuer: letsencrypt-production
-    https:
-      enabled: true
-      type: nginx
-  tls:
-    - secretName: staging-binder-pangeo-io-tls
-      hosts:
-       - staging.binder.pangeo.io
+      nginx.ingress.kubernetes.io/rewrite-target: /$1
+      nginx.ingress.kubernetes.io/use-regex: "true"
