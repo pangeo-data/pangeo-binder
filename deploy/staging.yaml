@@ -88,6 +88,7 @@ nginx-ingress:
       loadBalancerIP: 35.224.187.103
 
 prometheus:
+  enabled: true
   resources:
     limits:
       cpu: 500m
@@ -96,6 +97,7 @@ prometheus:
       cpu: 0m
       memory: 0Gi
 grafana:
+  enabled: true
   resources:
   resources:
     limits:
