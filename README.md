@@ -10,6 +10,15 @@ Branch | Build | Docs | Deployment
 staging | [![CircleCI](https://circleci.com/gh/pangeo-data/pangeo-binder/tree/staging.svg?style=svg)](https://circleci.com/gh/pangeo-data/pangeo-binder/tree/staging) | [![Documentation Status](https://readthedocs.org/projects/pangeo-binder/badge/?version=staging)](https://pangeo-binder.readthedocs.io/en/staging/?badge=staging) | https://staging.binder.pangeo.io/
 prod | [![CircleCI](https://circleci.com/gh/pangeo-data/pangeo-binder/tree/prod.svg?style=svg)](https://circleci.com/gh/pangeo-data/pangeo-binder/tree/prod) | [![Documentation Status](https://readthedocs.org/projects/pangeo-binder/badge/?version=prod)](https://pangeo-binder.readthedocs.io/en/prod/?badge=prod) | https://binder.pangeo.io/
 
+# Binder Monitoring
+
+Monitoring of the binderhubs is done with 
+[Prometheus](https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus)
+and
+[Grafana](https://github.com/grafana/helm-charts/tree/main/charts/grafana).
+- [AWS Binder Grafana Site](https://staging.aws-uswest2-binder.pangeo.io/grafana/?orgId=1)
+- [GCP Binder Grafana Site](https://staging.binder.pangeo.io/grafana/?orgId=1)
+
 # About Pangeo's Binder
 
 Much like [mybinder.org](https://mybinder.org), the [Pangeo's](https://pangeo.io/) BinderHub deployment ([binder.pangeo.io](https://binder.pangeo.io/)) allows users to create and share custom computing environments. The main distinction between the two BinderHubs is that Pangeo's BinderHub allows users to perform scalable computations using Dask.

@@ -28,6 +28,9 @@ helm version #>3
 helm repo add pangeo https://pangeo-data.github.io/helm-chart/
 helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
 helm repo add dask-gateway https://dask.org/dask-gateway-helm-repo/
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+helm repo add grafana https://grafana.github.io/helm-charts
 helm repo update
 cd pangeo-binder/pangeo-binder
 helm dependency update
