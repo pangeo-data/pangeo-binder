@@ -1,0 +1,94 @@
+prometheus:
+rbac:
+  create: true
+
+nodeExporter:
+  enabled: true
+  tolerations:
+    - operator: "Exists"
+  updateStrategy:
+    type: RollingUpdate
+  limits:
+    cpu: 500m
+    memory: 1Gi
+  requests:
+    cpu: 0m
+    memory: 0Gi
+  affinity:
+   nodeAffinity:
+     requiredDuringSchedulingIgnoredDuringExecution:
+       nodeSelectorTerms:
+       - matchExpressions:
+         - key: hub.jupyter.org/node-purpose
+           operator: In
+           values:
+           - core
+
+server:
+  enabled: true
+  retention: 30d
+  statefulSet: 
+    enabled: true
+  persistentVolume:
+    enabled: true
+  ingress:
+    enabled: false
+
+  resources:
+    limits:
+      cpu: 500m
+      memory: 4Gi
+    requests:
+      cpu: 0m
+      memory: 0Gi
+
+  affinity:
+   nodeAffinity:
+     requiredDuringSchedulingIgnoredDuringExecution:
+       nodeSelectorTerms:
+       - matchExpressions:
+         - key: hub.jupyter.org/node-purpose
+           operator: In
+           values:
+           - core
+
+kube-state-metrics:
+  # TODO: GKE also has a gke-metrics agent. Do we need this too?
+  resources:
+    limits:
+      cpu: 500m
+      memory: 4Gi
+    requests:
+      cpu: 0m
+      memory: 0Gi
+
+  affinity:
+   nodeAffinity:
+     requiredDuringSchedulingIgnoredDuringExecution:
+       nodeSelectorTerms:
+       - matchExpressions:
+         - key: hub.jupyter.org/node-purpose
+           operator: In
+           values:
+           - core
+
+# TODO: figure out if this top-level resources is used.
+resources:
+  limits:
+    cpu: 500m
+    memory: 1Gi
+  requests:
+    cpu: 0m
+    memory: 0Gi
+
+alertmanager:
+  enabled: false
+
+pushgateway:
+  enabled: false
+
+configmapReload:
+  prometheus:
+    enabled: false
+  alertmanager:
+    enabled: false
