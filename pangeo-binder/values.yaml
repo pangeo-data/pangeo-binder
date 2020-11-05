@@ -238,7 +238,7 @@ dask-gateway:
         c.KubeClusterConfig.idle_timeout = 1800
 
       optionHandler: |
-        from dask_gateway_server.options import Options, Integer, Float, String
+        from dask_gateway_server.options import Options, Integer, Float, String, Mapping
 
         def cluster_options(user):
            def option_handler(options):
@@ -252,6 +252,7 @@ dask-gateway:
                    "worker_cores": min(options.worker_cores / 2, 1),
                    "worker_memory": "%fG" % options.worker_memory,
                    "image": options.image,
+                   "environment": options.environment,
                    "scheduler_extra_pod_annotations": extra_annotations,
                    "worker_extra_pod_annotations": extra_annotations,
                }
@@ -259,9 +260,10 @@ dask-gateway:
                Integer("worker_cores", 2, min=1, max=4, label="Worker Cores"),
                Float("worker_memory", 4, min=1, max=8, label="Worker Memory (GiB)"),
                String("image", default="pangeo/pangeo-notebook:latest", label="Image"),
+               Mapping("environment", {}, label="Environment Variables"),
                handler=option_handler,
            )
-        
+
         c.Backend.cluster_options = cluster_options
       # TODO: replace with some k8s things
       # resource quota. per namespace.
@@ -272,70 +274,72 @@ dask-gateway:
       #   c.UserLimits.max_memory = "400 G"
       #   c.UserLimits.max_clusters = 1
 
-prometheus-operator:
-  prometheus:
-    alertmanager:
-      enabled: false
-    nodeExporter:
+prometheus:
+  alertmanager:
+    enabled: false
+  nodeExporter:
+    enabled: true
+    tolerations:
+      - operator: "Exists"
+    updateStrategy:
+      type: RollingUpdate
+  pushgateway:
+    enabled: false
+  rbac:
+    create: true
+  server:
+    enabled: true
+    retention: 30d
+    statefulSet:
       enabled: true
-      tolerations:
-        - operator: "Exists"
-      updateStrategy:
-        type: RollingUpdate
-    pushgateway:
-      enabled: false
-    rbac:
-      create: true
-    server:
+    persistentVolume:
       enabled: true
-      retention: 30d
-      statefulSet: 
-        enabled: true
-      persistentVolume:
-        enabled: true
-      ingress:
-        enabled: false
-    resources:
-      limits:
-        cpu: 500m
-        memory: 1Gi
-      requests:
-        cpu: 100m
-        memory: 1Gi
+    ingress:
+      enabled: false
+  resources:
+    limits:
+      cpu: 500m
+      memory: 1Gi
+    requests:
+      cpu: 100m
+      memory: 1Gi
 
-  grafana:
-    service:
-      type: LoadBalancer
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/path: "/metrics"
-    resources:
-      limits:
-        cpu: 500m
-        memory: 1Gi
-      requests:
-        cpu: 100m
-        memory: 256Mi
-    deploymentStrategy:
-      type: Recreate
-    persistence:
-      type: pvc
-      enabled: false
-    dashboardProviders:
-      dashboardproviders.yaml:
-        apiVersion: 1
-        providers:
-          - name: 'default'
-            orgId: 1
-            folder: ''
-            type: file
-            disableDeletion: true
-            editable: true
-            options:
-              path: /var/lib/grafana/dashboards/default
-    dashboards:
-      default:
-        cluster-monitoring-for-kubernetes:
-          gnetId: 10000
-          revision: 1
-          datasource: Prometheus
+grafana:
+  service:
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/path: "/metrics"
+  resources:
+    limits:
+      cpu: 500m
+      memory: 1Gi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+  deploymentStrategy:
+    type: Recreate
+  persistence:
+    type: pvc
+    enabled: false
+  dashboardProviders:
+    dashboardproviders.yaml:
+      apiVersion: 1
+      providers:
+        - name: 'default'
+          orgId: 1
+          folder: ''
+          type: file
+          disableDeletion: true
+          editable: true
+          options:
+            path: /var/lib/grafana/dashboards/default
+  dashboards:
+    default:
+      cluster-monitoring-for-kubernetes:
+        gnetId: 10000
+        revision: 1
+        datasource: Prometheus
+      dask:
+        gnetId: 12591
+        revision: 2
+        datasource: Prometheus

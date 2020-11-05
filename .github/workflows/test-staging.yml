@@ -29,6 +29,10 @@ jobs:
           path: pangeo-gallery
           submodules: recursive
 
+      - name: Update Submodules
+        # do we want to make this optional?
+        run: git submodule update --init --recursive --remote
+
       - uses: actions/setup-python@v1
         if: contains( env.COMMIT_MESSAGE , 'test-staging' )
         with:
