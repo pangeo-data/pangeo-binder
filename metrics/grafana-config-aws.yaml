@@ -1,0 +1,11 @@
+ingress:
+  enabled: true
+  hosts:
+    - staging.aws-uswest2-binder.pangeo.io
+
+grafana.ini:
+  server:
+    root_url: http://aws-uswest2-binder.pangeo.io/grafana
+
+persistence:
+  storageClassName: "mygp2"
