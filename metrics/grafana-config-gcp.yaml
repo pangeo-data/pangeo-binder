@@ -1,0 +1,11 @@
+ingress:
+  enabled: true
+  hosts:
+    - staging.binder.pangeo.io
+
+grafana.ini:
+  server:
+    root_url: http://staging.binder.pangeo.io/grafana
+
+persistence:
+  storageClassName: standard
