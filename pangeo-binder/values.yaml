@@ -238,7 +238,7 @@ dask-gateway:
         c.KubeClusterConfig.idle_timeout = 1800
 
       optionHandler: |
-        from dask_gateway_server.options import Options, Integer, Float, String
+        from dask_gateway_server.options import Options, Integer, Float, String, Mapping
 
         def cluster_options(user):
            def option_handler(options):
