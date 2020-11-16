@@ -65,6 +65,9 @@ binderhub:
       extraEnv:
         DASK_GATEWAY__AUTH__TYPE: "jupyterhub"
         DASK_GATEWAY__CLUSTER__OPTIONS__IMAGE: '{JUPYTER_IMAGE_SPEC}'
+        DASK_DISTRIBUTED__DASHBOARD_LINK: '/user/{JUPYTERHUB_USER}/proxy/{port}/status'
+        DASK_LABEXTENSION__FACTORY__MODULE: 'dask_gateway'
+        DASK_LABEXTENSION__FACTORY__CLASS: 'GatewayCluster'
 
       # to make notebook servers aware of hub
       # cmd: jupyterhub-singleuser  # turn back on to use auth
@@ -187,7 +190,7 @@ dask-gateway:
     prefix: "/services/dask-gateway"
     image:
       name: daskgateway/dask-gateway-server
-      tag: 0.8.0
+      tag: 0.9.0
       pullPolicy: IfNotPresent
 
     backend:
