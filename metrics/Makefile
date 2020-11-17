@@ -6,6 +6,8 @@ deploy-aws:
 	helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 	helm repo add grafana https://grafana.github.io/helm-charts
 	helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+	helm repo add stable https://charts.helm.sh/stable
+
 	kubectl create namespace metrics
 	# Prometheus
 	helm upgrade --wait --install -n metrics prometheus prometheus-community/prometheus \
@@ -24,6 +26,8 @@ deploy-gcp:
 	helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 	helm repo add grafana https://grafana.github.io/helm-charts
 	helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+	helm repo add stable https://charts.helm.sh/stable
+
 	kubectl create namespace metrics
 	# Prometheus
 	helm upgrade --wait --install -n metrics prometheus prometheus-community/prometheus \
