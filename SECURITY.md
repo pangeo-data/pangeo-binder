@@ -2,4 +2,4 @@
 
 ## Reporting a Vulnerability
 
-Please report security vulnerabilities to xxxxxxxxx@xxxxxxxxxxxxxx.xxx 
+Please report security vulnerabilities to pangeo-steering-council@googlegroups.com 
