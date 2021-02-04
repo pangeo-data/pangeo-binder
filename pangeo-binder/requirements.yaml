@@ -1,4 +1,5 @@
 # requirements.yaml
+# https://github.com/jupyterhub/mybinder.org-deploy/blob/a15bac97e26b8a085255e06b3c765b9fb2e982fd/mybinder/Chart.yaml
 dependencies:
 - name: binderhub
   version: 0.2.0-n219.hbc17443

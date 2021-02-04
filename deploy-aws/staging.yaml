@@ -75,8 +75,8 @@ binderhub:
     singleuser:
       serviceAccountName: pangeo
       # to make notebook servers aware of hub
-      cmd: jupyterhub-singleuser
-      defaultUrl: "/lab"
+      #cmd: jupyterhub-singleuser
+      #defaultUrl: "/lab"
       extraEnv:
         DASK_GATEWAY__ADDRESS: "https://hub.staging.aws-uswest2-binder.pangeo.io/services/dask-gateway/"
         DASK_GATEWAY__PROXY_ADDRESS: "gateway://traefik-staging-dask-gateway.staging:80"
@@ -92,8 +92,7 @@ binderhub:
       #  OAUTH2_TOKEN_URL: "https://pangeo.auth0.com/oauth/token"
       #  OAUTH_CALLBACK_URL: "https://staging.aws-uswest2-binder.pangeo.io/hub/oauth_callback"
       services:
-        binder:
-          #url: http://194.95.75.9:30083  # base worker
+        #binder:
           #oauth_no_confirm: true
           #oauth_redirect_uri: "https://staging.aws-uswest2-binder.pangeo.io/oauth_callback"
           #oauth_client_id: "auth0"
@@ -129,6 +128,7 @@ binderhub:
           mountPath: /usr/local/share/jupyterhub/static/extra-assets
           subPath: extra-assets
       extraConfig:
+        # NOTE: this doesn't show up on initial binder landing page
         00-template-config: |
           c.JupyterHub.template_paths = ['/usr/local/share/jupyterhub/custom-templates/']
           c.JupyterHub.template_vars = {
@@ -137,22 +137,22 @@ binderhub:
             'pangeo_welcome': """Welcome to Pangeo BinderHub, a platform for distributed computing to support Earth Science research. <strong>This is a prototype and should be treated accordingly. We make no promises that the service will remain active. Do not store passwords or sensitive data</strong>. To provide feedback and report any technical problems, please use the <a href="https://github.com/pangeo-data/pangeo-binder/issues">github issue tracker</a>. Maintained by the <a href="http://pangeo.io">Pangeo project</a> and supported by <a href="https://github.com/pangeo-data/nasa-access-17">NASA Grant #17-ACCESS17-0003</a> and cloud credits from Amazon. <p>Access is currently open to any GitHub user. Register by clicking on the sign in button below:</p>""",
             'announcement_login': 'This BinderHub now uses Dask Gateway 0.9 <a href="https://medium.com/pangeo/pangeo-with-dask-gateway-4b638825f105">Read more</a>'
           }
-    auth:
+    #auth:
       # Auth0 Login
-    #  type: custom
-    #  custom:
-    #    className: oauthenticator.generic.GenericOAuthenticator
-    #    config:
-    #      login_service: "Pangeo Login"
-    #      token_url: https://pangeo.auth0.com/oauth/token
-    #      userdata_url: https://pangeo.auth0.com/oauth/userinfo
-    #      userdata_method: GET
-    #      username_key: nickname
-    #      scope:
-    #        - openid
-    #        - profile
-    #        - email
-      admin:
-        access: true
-        users:
-          - scottyhq
+      #type: custom
+      #custom:
+      #  className: oauthenticator.generic.GenericOAuthenticator
+      #  config:
+      #    login_service: "Pangeo Login"
+      #    token_url: https://pangeo.auth0.com/oauth/token
+      #    userdata_url: https://pangeo.auth0.com/oauth/userinfo
+      #    userdata_method: GET
+      #    username_key: nickname
+      #    scope:
+      #      - openid
+      #      - profile
+      #      - email
+    #  admin:
+    #    access: true
+    #    users:
+    #      - scottyhq
