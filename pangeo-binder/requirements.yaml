@@ -1,14 +1,15 @@
 # requirements.yaml
+# https://github.com/jupyterhub/mybinder.org-deploy/blob/a15bac97e26b8a085255e06b3c765b9fb2e982fd/mybinder/Chart.yaml
 dependencies:
 - name: binderhub
   version: 0.2.0-n219.hbc17443
-  repository: https://jupyterhub.github.io/helm-chart/
+  repository: https://jupyterhub.github.io/helm-chart
   import-values:
     - child: rbac
       parent: rbac
-- name: nginx-ingress
-  version: 1.34.2
-  repository: https://kubernetes-charts.storage.googleapis.com
+- name: ingress-nginx
+  version: 2.13.0
+  repository: https://kubernetes.github.io/ingress-nginx
 - name: dask-gateway
-  version: "0.9.0"
-  repository: 'https://dask.org/dask-gateway-helm-repo/'
+  version: 0.9.0
+  repository: https://dask.org/dask-gateway-helm-repo

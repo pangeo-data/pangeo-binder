@@ -107,3 +107,38 @@ Other cheatsheet commands:
 ```
 eksctl delete iamserviceaccount --cluster pangeo-binder --name pangeo --namespace staging
 ```
+
+
+## Update Cluster (K8s version and nodegroups)
+https://eksctl.io/usage/cluster-upgrade/
+
+last did this 2/3/2021 with eksctl 0.37.0
+```
+eksctl upgrade cluster --name=pangeo-binder --approve
+eksctl utils update-kube-proxy --profile circleci --name pangeo-binder --region us-west-2 --approve
+eksctl utils update-aws-node --profile circleci --name pangeo-binder --region us-west-2 --approve
+eksctl utils update-coredns --profile circleci --name pangeo-binder --region us-west-2 --approve
+```
+
+create new nodegroups
+```
+eksctl create nodegroup --profile circleci --config-file=eksctl-config.yml
+```
+
+bump autoscaler version (1.16.7)
+https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler#releases
+```
+kubectl apply -f cluster-autoscaler.yml
+```
+
+Need to upgrade certmanager  https://cert-manager.io/docs/installation/kubernetes/
+https://cert-manager.io/docs/installation/uninstall/kubernetes/
+```
+kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.1.0/cert-manager.yaml
+```
+and update binderhub-issuer-staging.yaml to use `apiVersion: cert-manager.io/v1`
+(https://cert-manager.io/docs/configuration/acme/#creating-a-basic-acme-issuer)
+```
+# Wait about 2 minutes for 'webhook' to start running before running this command:
+kubectl apply -f binderhub-issuer-staging.yaml
+```

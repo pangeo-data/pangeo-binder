@@ -33,7 +33,7 @@ jobs:
           name: Install helm
           when: always
           command: |
-            curl https://get.helm.sh/helm-v3.1.2-linux-amd64.tar.gz | \
+            curl https://get.helm.sh/helm-v3.4.1-linux-amd64.tar.gz | \
               tar -xzf -
             sudo mv linux-amd64/helm /usr/local/bin
             helm version
@@ -42,7 +42,7 @@ jobs:
             helm repo add dask-gateway https://dask.org/dask-gateway-helm-repo/
             helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
             helm repo add grafana https://grafana.github.io/helm-charts
-            helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+            helm repo add stable https://charts.helm.sh/stable
             helm repo update
 
             cd ~/repo/pangeo-binder
@@ -58,61 +58,59 @@ jobs:
             sudo mv ./kubectl /usr/local/bin/kubectl
             kubectl version --client
 
-      - run:
-          name: Authenticate to Google k8s cluster
-          when: always
-          command: |
-            gcloud auth activate-service-account --key-file ~/repo/secrets/gcloud-service-key.json
-            gcloud container clusters --zone=us-central1-b --project=pangeo-181919 get-credentials binder
-
-      - run:
-          name: Deploy Google binderhub
-          when: always
-          command: |
-            helm upgrade --wait --install \
-              ${CIRCLE_BRANCH} pangeo-binder \
-              --namespace=${CIRCLE_BRANCH} --version=v0.2.0 \
-              -f ./deploy/${CIRCLE_BRANCH}.yaml \
-              -f ./secrets/${CIRCLE_BRANCH}.yaml \
-              -f ./secrets/common.yaml
-
-      # AWS deployment
-      # --------------
-      - run:
-          name: Authenticate to AWS k8s cluster
-          when: always
-          command: |
-            #unable to get this env var to work for some reason
-            #AWS_SHARED_CREDENTIALS_FILE=/home/circleci/repo/secrets-aws/aws-config.txt
-            aws --version
-            mkdir ~/.aws
-            mv /home/circleci/repo/secrets-aws/aws-config.txt ~/.aws/credentials
-            aws configure set default.region us-west-2
-            aws eks update-kubeconfig --name pangeo-binder > /dev/null
-      - run:
-          name: Add Runner IP to EKS Kubernetes API Whitelist
-          when: always
-          command: |
-            RUNNERIP=`curl --silent https://checkip.amazonaws.com`
-            aws eks update-cluster-config --name pangeo-binder --resources-vpc-config publicAccessCidrs=${RUNNERIP}/32 > /dev/null
-            sleep 90
-      - run:
-          name: Deploy AWS binderhub
-          when: always
-          command: |
-            kubectl apply -f https://raw.githubusercontent.com/dask/dask-gateway/0.8.0/resources/helm/dask-gateway/crds/daskclusters.yaml
-            kubectl apply -f https://raw.githubusercontent.com/dask/dask-gateway/0.8.0/resources/helm/dask-gateway/crds/traefik.yaml
-            helm upgrade --wait --install \
-              ${CIRCLE_BRANCH} pangeo-binder \
-              --namespace=${CIRCLE_BRANCH} --version=v0.2.0 \
-              -f ./deploy-aws/${CIRCLE_BRANCH}.yaml \
-              -f ./secrets-aws/${CIRCLE_BRANCH}.yaml
-            #helm history ${CIRCLE_BRANCH} -n ${CIRCLE_BRANCH}
-      - run:
-          name: Revert to Original EKS IP Whitelist
-          when: always
-          command: |
-            aws eks update-cluster-config --name pangeo-binder --resources-vpc-config publicAccessCidrs=${AWS_IP_WHITELIST} > /dev/null
+      # - run:
+      #     name: Authenticate to Google k8s cluster
+      #     when: always
+      #     command: |
+      #       gcloud auth activate-service-account --key-file ~/repo/secrets/gcloud-service-key.json
+      #       gcloud container clusters --zone=us-central1-b --project=pangeo-181919 get-credentials binder
+      #
+      # - run:
+      #     name: Deploy Google binderhub
+      #     when: always
+      #     command: |
+      #       helm upgrade --wait --install \
+      #         ${CIRCLE_BRANCH} pangeo-binder \
+      #         --namespace=${CIRCLE_BRANCH} --version=v0.2.0 \
+      #         -f ./deploy/${CIRCLE_BRANCH}.yaml \
+      #         -f ./secrets/${CIRCLE_BRANCH}.yaml \
+      #         -f ./secrets/common.yaml
+      #
+      # # AWS deployment
+      # # --------------
+      # - run:
+      #     name: Authenticate to AWS k8s cluster
+      #     when: always
+      #     command: |
+      #       #unable to get this env var to work for some reason
+      #       #AWS_SHARED_CREDENTIALS_FILE=/home/circleci/repo/secrets-aws/aws-config.txt
+      #       aws --version
+      #       mkdir ~/.aws
+      #       mv /home/circleci/repo/secrets-aws/aws-config.txt ~/.aws/credentials
+      #       aws configure set default.region us-west-2
+      #       aws eks update-kubeconfig --name pangeo-binder > /dev/null
+      # - run:
+      #     name: Add Runner IP to EKS Kubernetes API Whitelist
+      #     when: always
+      #     command: |
+      #       RUNNERIP=`curl --silent https://checkip.amazonaws.com`
+      #       aws eks update-cluster-config --name pangeo-binder --resources-vpc-config publicAccessCidrs=${AWS_IP_WHITELIST},${RUNNERIP}/32 > /dev/null
+      #       sleep 90
+      # - run:
+      #     name: Deploy AWS binderhub
+      #     when: always
+      #     command: |
+      #       helm upgrade --wait --install \
+      #         ${CIRCLE_BRANCH} pangeo-binder \
+      #         --namespace=${CIRCLE_BRANCH} --version=v0.2.0 \
+      #         -f ./deploy-aws/${CIRCLE_BRANCH}.yaml \
+      #         -f ./secrets-aws/${CIRCLE_BRANCH}.yaml
+      #       #helm history ${CIRCLE_BRANCH} -n ${CIRCLE_BRANCH}
+      # - run:
+      #     name: Revert to Original EKS IP Whitelist
+      #     when: always
+      #     command: |
+      #       aws eks update-cluster-config --name pangeo-binder --resources-vpc-config publicAccessCidrs=${AWS_IP_WHITELIST} > /dev/null
 
 workflows:
   version: 2
