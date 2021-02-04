@@ -130,3 +130,15 @@ https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler#releases
 ```
 kubectl apply -f cluster-autoscaler.yml
 ```
+
+Need to upgrade certmanager  https://cert-manager.io/docs/installation/kubernetes/
+https://cert-manager.io/docs/installation/uninstall/kubernetes/
+```
+kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.1.0/cert-manager.yaml
+```
+and update binderhub-issuer-staging.yaml to use `apiVersion: cert-manager.io/v1`
+(https://cert-manager.io/docs/configuration/acme/#creating-a-basic-acme-issuer)
+```
+# Wait about 2 minutes for 'webhook' to start running before running this command:
+kubectl apply -f binderhub-issuer-staging.yaml
+```

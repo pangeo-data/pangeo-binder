@@ -9,7 +9,7 @@ binderhub:
       badge_base_url: https://staging.aws-uswest2-binder.pangeo.io
       image_prefix: pangeoaccess/binder-staging-
       use_registry: true
-      auth_enabled: true
+      #auth_enabled: true
   nodeSelector:
     hub.jupyter.org/node-purpose: core
   resources:
@@ -39,8 +39,8 @@ binderhub:
     hostSocketDir: /var/run/dind/stage
 
   jupyterhub:
-    custom:
-      binderauth_enabled: true
+    #custom:
+    #  binderauth_enabled: true
     proxy:
       nodeSelector:
         hub.jupyter.org/node-purpose: core
@@ -82,21 +82,21 @@ binderhub:
         DASK_GATEWAY__PROXY_ADDRESS: "gateway://traefik-staging-dask-gateway.staging:80"
 
     hub:
-      redirectToServer: false
+      #redirectToServer: false
       resources:
         requests:
           cpu: 50m
           memory: 100Mi
-      extraEnv:
-        OAUTH2_AUTHORIZE_URL: "https://pangeo-aws.auth0.com/authorize"
-        OAUTH2_TOKEN_URL: "https://pangeo-aws.auth0.com/oauth/token"
-        #OAUTH_CALLBACK_URL: "https://staging.aws-uswest2-binder.pangeo.io/hub/oauth_callback"
+      #extraEnv:
+      #  OAUTH2_AUTHORIZE_URL: "https://pangeo.auth0.com/authorize"
+      #  OAUTH2_TOKEN_URL: "https://pangeo.auth0.com/oauth/token"
+      #  OAUTH_CALLBACK_URL: "https://staging.aws-uswest2-binder.pangeo.io/hub/oauth_callback"
       services:
         binder:
           #url: http://194.95.75.9:30083  # base worker
-          oauth_no_confirm: true
-          oauth_redirect_uri: "https://staging.aws-uswest2-binder.pangeo.io/oauth_callback"
-          oauth_client_id: "auth0"
+          #oauth_no_confirm: true
+          #oauth_redirect_uri: "https://staging.aws-uswest2-binder.pangeo.io/oauth_callback"
+          #oauth_client_id: "auth0"
         dask-gateway:
           # This makes the gateway available at ${HUB_URL}/services/dask-gateway
           url: http://traefik-staging-dask-gateway.staging
@@ -135,25 +135,24 @@ binderhub:
             'pangeo_hub_title': 'Pangeo BinderHub',
             'pangeo_hub_subtitle': 'AWS us-west-2',
             'pangeo_welcome': """Welcome to Pangeo BinderHub, a platform for distributed computing to support Earth Science research. <strong>This is a prototype and should be treated accordingly. We make no promises that the service will remain active. Do not store passwords or sensitive data</strong>. To provide feedback and report any technical problems, please use the <a href="https://github.com/pangeo-data/pangeo-binder/issues">github issue tracker</a>. Maintained by the <a href="http://pangeo.io">Pangeo project</a> and supported by <a href="https://github.com/pangeo-data/nasa-access-17">NASA Grant #17-ACCESS17-0003</a> and cloud credits from Amazon. <p>Access is currently open to any GitHub user. Register by clicking on the sign in button below:</p>""",
-            'announcement_login': 'This BinderHub now uses Dask Gateway 0.7.1 <a href="https://medium.com/pangeo/pangeo-with-dask-gateway-4b638825f105">Read more</a>'
+            'announcement_login': 'This BinderHub now uses Dask Gateway 0.9 <a href="https://medium.com/pangeo/pangeo-with-dask-gateway-4b638825f105">Read more</a>'
           }
     auth:
       # Auth0 Login
-      type: custom
-      custom:
-        className: oauthenticator.generic.GenericOAuthenticator
-        config:
-          login_service: "Pangeo Login"
-          token_url: https://pangeo-aws.auth0.com/oauth/token
-          userdata_url: https://pangeo-aws.auth0.com/oauth/userinfo
-          userdata_method: GET
-          username_key: nickname
-          scope:
-            - openid
-            - profile
-            - email
+    #  type: custom
+    #  custom:
+    #    className: oauthenticator.generic.GenericOAuthenticator
+    #    config:
+    #      login_service: "Pangeo Login"
+    #      token_url: https://pangeo.auth0.com/oauth/token
+    #      userdata_url: https://pangeo.auth0.com/oauth/userinfo
+    #      userdata_method: GET
+    #      username_key: nickname
+    #      scope:
+    #        - openid
+    #        - profile
+    #        - email
       admin:
         access: true
         users:
           - scottyhq
-          - salvis2

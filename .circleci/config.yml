@@ -33,7 +33,7 @@ jobs:
           name: Install helm
           when: always
           command: |
-            curl https://get.helm.sh/helm-v3.1.2-linux-amd64.tar.gz | \
+            curl https://get.helm.sh/helm-v3.4.1-linux-amd64.tar.gz | \
               tar -xzf -
             sudo mv linux-amd64/helm /usr/local/bin
             helm version
@@ -42,7 +42,7 @@ jobs:
             helm repo add dask-gateway https://dask.org/dask-gateway-helm-repo/
             helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
             helm repo add grafana https://grafana.github.io/helm-charts
-            helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+            helm repo add stable https://charts.helm.sh/stable
             helm repo update
 
             cd ~/repo/pangeo-binder
@@ -94,14 +94,12 @@ jobs:
           when: always
           command: |
             RUNNERIP=`curl --silent https://checkip.amazonaws.com`
-            aws eks update-cluster-config --name pangeo-binder --resources-vpc-config publicAccessCidrs=${RUNNERIP}/32 > /dev/null
+            aws eks update-cluster-config --name pangeo-binder --resources-vpc-config publicAccessCidrs=${AWS_IP_WHITELIST},${RUNNERIP}/32 > /dev/null
             sleep 90
       - run:
           name: Deploy AWS binderhub
           when: always
           command: |
-            kubectl apply -f https://raw.githubusercontent.com/dask/dask-gateway/0.8.0/resources/helm/dask-gateway/crds/daskclusters.yaml
-            kubectl apply -f https://raw.githubusercontent.com/dask/dask-gateway/0.8.0/resources/helm/dask-gateway/crds/traefik.yaml
             helm upgrade --wait --install \
               ${CIRCLE_BRANCH} pangeo-binder \
               --namespace=${CIRCLE_BRANCH} --version=v0.2.0 \
